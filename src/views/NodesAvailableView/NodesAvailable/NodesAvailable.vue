@@ -26,7 +26,7 @@
     <nodes-list
       v-else
       :nodes="filteredNodes"
-      :select="selectNode"
+      :select="select"
       :load-more="loadMore"
     />
   </div>
@@ -74,7 +74,7 @@ const isLoadingFailed = computed<boolean>(
 );
 
 const openCountry = (code: string) => {
-  openNodesAvailableView(props.continentCode, props.countryCode);
+  openNodesAvailableView(props.continentCode, code);
 };
 
 const loadMore = () => {
