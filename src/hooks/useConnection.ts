@@ -1,8 +1,9 @@
 import { useStore } from "vuex";
 import { computed, type ComputedRef } from "vue";
-import { type Node, NodeSelectionStatus } from "@/types";
-import { useRouter } from "vue-router";
+import { type Node, NodeSelectionStatus, NodeStatus } from "@/types";
 import useAppDialogs from "@/hooks/useAppDialogs";
+import useSubscription from "@/hooks/useSubscription";
+import useAppRouter from "@/hooks/useAppRouter";
 
 export default function useConnection(): {
   select(node: Node): Promise<void>;
@@ -12,7 +13,8 @@ export default function useConnection(): {
   isConnectionLoading: ComputedRef<boolean>;
 } {
   const store = useStore();
-  const router = useRouter();
+  const { openConnectionView } = useAppRouter();
+  const { unsubscribe } = useSubscription();
   const { openSubscriptionModal } = useAppDialogs();
 
   const isConnectionLoading = computed<boolean>(
@@ -42,7 +44,7 @@ export default function useConnection(): {
         openSubscriptionModal(node);
         return;
       case NodeSelectionStatus.SUCCESS:
-        await router.push({ name: "home" });
+        openConnectionView();
         if (connect) {
           await store.dispatch("connectToNode");
         }
@@ -51,7 +53,11 @@ export default function useConnection(): {
   };
 
   const select = async (node: Node): Promise<void> => {
-    return await handleNodeSelection(node, false);
+    if (node.status === NodeStatus.active) {
+      await handleNodeSelection(node, false);
+    } else {
+      await unsubscribe(node);
+    }
   };
 
   const connect = async (node: Node): Promise<void> => {

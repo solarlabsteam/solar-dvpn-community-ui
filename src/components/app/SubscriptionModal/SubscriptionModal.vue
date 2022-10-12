@@ -67,14 +67,14 @@ import SlrButton from "@/components/ui/SlrButton/SlrButton.vue";
 import useSubscription from "@/hooks/useSubscription";
 import { network } from "@/constants";
 import useError from "@/hooks/useError";
-import { useRouter } from "vue-router";
+import useAppRouter from "@/hooks/useAppRouter";
 
 const { t } = useI18n();
 const emitter = useGlobalEmitter();
 const { subscribe } = useSubscription();
 const store = useStore();
 const { setError } = useError();
-const router = useRouter();
+const { openConnectionView } = useAppRouter();
 
 const isOpen = ref(false);
 const amountGb = ref<number>(1);
@@ -107,7 +107,7 @@ const subscribeToNode = async () => {
   try {
     const closeModal = await subscribe(node.value!, amountGb.value);
     if (closeModal) close();
-    await router.push({ name: "home" });
+    openConnectionView();
   } catch (e) {
     setError(JSON.stringify(e));
   }

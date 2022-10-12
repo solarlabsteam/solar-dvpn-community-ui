@@ -27,7 +27,7 @@
       v-else
       class="nodes-search__list"
       :nodes="filteredNodes"
-      :select="selectNode"
+      :select="select"
       :load-more="loadMore"
     />
   </div>
@@ -37,11 +37,11 @@
 import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
 import { computed, ref, watch } from "vue";
-import useNodeActions from "@/hooks/useNodeActions";
 import type { ContinentCode, Node, NodesSearchParameters } from "@/types";
 import SlrLinearLoader from "@/components/ui/SlrLinearLoader";
 import NodesList from "@/components/app/NodesList";
 import NoData from "@/components/app/NoData";
+import useConnection from "@/hooks/useConnection";
 
 defineProps<{
   continentCode?: ContinentCode;
@@ -50,7 +50,7 @@ defineProps<{
 
 const store = useStore();
 const { t } = useI18n();
-const { selectNode } = useNodeActions();
+const { select } = useConnection();
 
 const searchString = ref("");
 const displayedContinent = ref<ContinentCode>();

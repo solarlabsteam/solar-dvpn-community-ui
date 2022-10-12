@@ -36,8 +36,6 @@
 import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
 import { computed, watch } from "vue";
-import { useRouter } from "vue-router";
-import useNodeActions from "@/hooks/useNodeActions";
 import type {
   ContinentCode,
   ContinentsInfo,
@@ -49,6 +47,8 @@ import SlrLinearLoader from "@/components/ui/SlrLinearLoader";
 import NodesList from "@/components/app/NodesList";
 import CountriesList from "@/components/app/CountriesList";
 import NoData from "@/components/app/NoData";
+import useConnection from "@/hooks/useConnection";
+import useAppRouter from "@/hooks/useAppRouter";
 
 const props = defineProps<{
   continentCode?: ContinentCode;
@@ -57,8 +57,8 @@ const props = defineProps<{
 
 const store = useStore();
 const { t } = useI18n();
-const router = useRouter();
-const { selectNode } = useNodeActions();
+const { openNodesAvailableView } = useAppRouter();
+const { select } = useConnection();
 
 const filteredNodes = computed<Node[]>(() => store.getters.nodes);
 const continents = computed<ContinentsInfo>(() => store.getters.continents);
@@ -74,10 +74,7 @@ const isLoadingFailed = computed<boolean>(
 );
 
 const openCountry = (code: string) => {
-  router.push({
-    name: "nodes-available",
-    query: { continentCode: props.continentCode, countryCode: code },
-  });
+  openNodesAvailableView(props.continentCode, props.countryCode);
 };
 
 const loadMore = () => {

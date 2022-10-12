@@ -26,13 +26,13 @@
 
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
-import { useRouter } from "vue-router";
+import useAppRouter from "@/hooks/useAppRouter";
 
 const { t } = useI18n();
-const router = useRouter();
+const { openConnectionView } = useAppRouter();
 
 const close = () => {
-  router.push({ name: "home" });
+  openConnectionView();
 };
 </script>
 

@@ -44,9 +44,7 @@ const isDefaultNodeLoading = computed<boolean>(
 const isLogoutInProcess = computed<boolean>(
   () => store.getters.isLogoutLoading
 );
-// const isWalletLoading = computed<boolean>(
-//   () => store.getters.isWalletLoading
-// );
+
 const isAppLoading = computed<boolean>(
   () =>
     isLogoutInProcess.value ||
@@ -121,7 +119,6 @@ body {
   height: 100%;
   overflow: hidden;
   margin: 0;
-  -webkit-app-region: drag;
 }
 
 #app {

@@ -1,6 +1,6 @@
 import type { Module } from "vuex";
 import { AccountMutationTypes } from "@/store/mutation-types";
-import type { Wallet, WalletProfile } from "@/types";
+import type { Wallet } from "@/types";
 import walletService from "@/services/WalletService";
 
 interface AccountState {
@@ -25,21 +25,22 @@ export default {
   },
 
   actions: {
-    async getWallet({ commit }): Promise<Wallet> {
+    async getWallet({ commit }): Promise<void> {
       commit(AccountMutationTypes.SET_WALLET_LOADING_STATE, true);
       try {
         const wallet = await walletService.getWallet();
         commit(AccountMutationTypes.SET_WALLET, wallet);
-        return wallet;
       } finally {
         commit(AccountMutationTypes.SET_WALLET_LOADING_STATE, false);
       }
     },
 
-    async createWallet({ commit }): Promise<WalletProfile> {
+    async createWallet({ commit }): Promise<string> {
       commit(AccountMutationTypes.SET_WALLET_LOADING_STATE, true);
       try {
-        return await walletService.createWallet();
+        const wallet = await walletService.createWallet();
+        commit(AccountMutationTypes.SET_WALLET, wallet);
+        return wallet.mnemonic;
       } finally {
         commit(AccountMutationTypes.SET_WALLET_LOADING_STATE, false);
       }

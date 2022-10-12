@@ -16,12 +16,12 @@
 </template>
 
 <script setup lang="ts">
-import { useRouter } from "vue-router";
 import SetupMnemonic from "@/views/SetupMnemonicView/SetupMnemonic";
+import useAppRouter from "@/hooks/useAppRouter";
 
-const router = useRouter();
+const { openSetupGreetingView } = useAppRouter();
 
 const close = () => {
-  router.push({ name: "setup" });
+  openSetupGreetingView();
 };
 </script>

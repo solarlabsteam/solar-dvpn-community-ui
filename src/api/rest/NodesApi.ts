@@ -3006,7 +3006,6 @@ class NodesApiMock implements INodesApi {
     query?: string,
     page?: number
   ): Promise<NodesData> {
-    console.log("nodwds");
     return Promise.resolve({
       pagination: <Pagination>formatObjectKeysToCamelCase({
         current_page: 1,

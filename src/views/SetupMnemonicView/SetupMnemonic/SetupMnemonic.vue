@@ -44,21 +44,18 @@
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
 import useWallet from "@/hooks/useWallet";
-import router from "@/router";
 import useError from "@/hooks/useError";
+import useAppRouter from "@/hooks/useAppRouter";
+import type { WalletProfile } from "@/types";
 
 const { t } = useI18n();
 const { isWalletLoading, create } = useWallet();
+const { openSetupCreateView } = useAppRouter();
 const { setError } = useError();
 
 const onCreate = () => {
   create()
-    .then((wallet) =>
-      router.push({
-        name: "check-mnemonic",
-        params: { mnemonic: wallet?.mnemonic },
-      })
-    )
+    .then((wallet: WalletProfile) => openSetupCreateView(wallet.mnemonic))
     .catch((e) => setError(JSON.stringify(e)));
 };
 </script>

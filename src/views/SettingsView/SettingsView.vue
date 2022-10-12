@@ -17,12 +17,12 @@
 
 <script setup lang="ts">
 import SettingsDns from "@/views/SettingsView/SettingsDns";
-import { useRouter } from "vue-router";
+import useAppRouter from "@/hooks/useAppRouter";
 
-const router = useRouter();
+const { openConnectionView } = useAppRouter();
 
 const close = () => {
-  router.push({ name: "home" });
+  openConnectionView();
 };
 </script>
 

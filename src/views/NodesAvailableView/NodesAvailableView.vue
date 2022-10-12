@@ -30,11 +30,11 @@
 <script setup lang="ts">
 import SlrView from "@/components/ui/SlrView/SlrView.vue";
 import { useI18n } from "vue-i18n";
-import { useRouter } from "vue-router";
 import type { ContinentCode } from "@/types";
 import NodesAvailable from "@/views/NodesAvailableView/NodesAvailable/NodesAvailable.vue";
 import { computed } from "vue";
 import lookupCountry from "country-code-lookup";
+import useAppRouter from "@/hooks/useAppRouter";
 
 const props = defineProps<{
   continentCode?: ContinentCode;
@@ -42,7 +42,8 @@ const props = defineProps<{
 }>();
 
 const { t } = useI18n();
-const router = useRouter();
+const { openNodesView, openNodesAvailableView, openNodesSearchView } =
+  useAppRouter();
 
 const continentName = computed(
   () => props.continentCode && t(`continent.${props.continentCode}`)
@@ -54,22 +55,13 @@ const location = computed(() => countryName.value || continentName.value);
 
 const back = () => {
   if (!props.countryCode) {
-    router.push({ name: "nodes" });
+    openNodesView();
   } else if (props.countryCode) {
-    router.push({
-      name: "nodes-available",
-      query: { continentCode: props.continentCode },
-    });
+    openNodesAvailableView(props.continentCode);
   }
 };
 
 const search = async () => {
-  await router.push({
-    name: "nodes-search",
-    query: {
-      continentCode: props.continentCode,
-      countryCode: props.countryCode,
-    },
-  });
+  openNodesSearchView(props.continentCode, props.countryCode);
 };
 </script>

@@ -29,15 +29,15 @@
 
 <script setup lang="ts">
 import SlrView from "@/components/ui/SlrView/SlrView.vue";
-import { useRouter } from "vue-router";
 import RecoverMnemonic from "@/views/SetupMnemonicRecoverView/RecoverMnemonic/RecoverMnemonic.vue";
 import SlrButton from "@/components/ui/SlrButton/SlrButton.vue";
 import { useI18n } from "vue-i18n";
 import { computed, ref } from "vue";
 import useWallet from "@/hooks/useWallet";
 import useError from "@/hooks/useError";
+import useAppRouter from "@/hooks/useAppRouter";
 
-const router = useRouter();
+const { openSetupCompleteView, openSetupActionsView } = useAppRouter();
 const { t } = useI18n();
 const { recover } = useWallet();
 const { setError } = useError();
@@ -49,7 +49,7 @@ const continueDisabled = computed<boolean>(
 );
 
 const back = () => {
-  router.push({ name: "mnemonic-setup" });
+  openSetupActionsView();
 };
 
 const onWordsUpdate = (value: string, index: number) => {
@@ -59,7 +59,7 @@ const onWordsUpdate = (value: string, index: number) => {
 const done = () => {
   const mnemonic = words.value.map((i) => i.trim()).join(" ");
   recover(mnemonic)
-    .then(() => router.push({ name: "setup-complete" }))
+    .then(openSetupCompleteView)
     .catch((e) => setError(e.message));
 };
 </script>

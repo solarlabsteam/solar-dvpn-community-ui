@@ -3,7 +3,7 @@
   <subscribed-nodes-list
     v-if="nodes.length"
     :nodes="nodes"
-    :select="selectNode"
+    :select="select"
     :unsubscribe="unsubscribeFromNode"
     :load-more="loadMore"
   />
@@ -27,17 +27,17 @@
 import { computed, inject } from "vue";
 import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
-import useNodeActions from "@/hooks/useNodeActions";
 import SubscribedNodesList from "@/components/app/SubscribedNodesList/SubscribedNodesList.vue";
 import NoData from "@/components/app/NoData";
 import SlrLinearLoader from "@/components/ui/SlrLinearLoader";
 import type { Node } from "@/types";
 import useError from "@/hooks/useError";
 import useSubscription from "@/hooks/useSubscription";
+import useConnection from "@/hooks/useConnection";
 
 const store = useStore();
 const { t } = useI18n();
-const { selectNode } = useNodeActions();
+const { select } = useConnection();
 const { setError } = useError();
 const { unsubscribe } = useSubscription();
 

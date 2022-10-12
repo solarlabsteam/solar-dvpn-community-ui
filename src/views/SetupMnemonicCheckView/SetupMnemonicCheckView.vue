@@ -14,18 +14,18 @@
 
 <script setup lang="ts">
 import SlrView from "@/components/ui/SlrView/SlrView.vue";
-import { useRouter } from "vue-router";
 import CheckMnemonic from "@/views/SetupMnemonicCheckView/CheckMnemonic/CheckMnemonic.vue";
 import { useI18n } from "vue-i18n";
+import useAppRouter from "@/hooks/useAppRouter";
 
 const props = defineProps<{
   mnemonic: string;
 }>();
 
 const { t } = useI18n();
-const router = useRouter();
+const { openSetupActionsView } = useAppRouter();
 
 const back = () => {
-  router.push({ name: "mnemonic-setup" });
+  openSetupActionsView();
 };
 </script>

@@ -17,13 +17,13 @@
 
 <script setup lang="ts">
 import SlrView from "@/components/ui/SlrView/SlrView.vue";
-import { useRouter } from "vue-router";
 import AccountSettings from "@/views/AccountView/AccountSettings";
+import useAppRouter from "@/hooks/useAppRouter";
 
-const router = useRouter();
+const { openConnectionView } = useAppRouter();
 
 const close = () => {
-  router.push({ name: "home" });
+  openConnectionView();
 };
 </script>
 

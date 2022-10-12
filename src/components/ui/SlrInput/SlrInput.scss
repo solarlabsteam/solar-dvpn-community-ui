@@ -8,7 +8,6 @@
   box-sizing: border-box;
   padding: 11px 12px;
   background: var(--slr__input-bg-clr);
-  -webkit-app-region: no-drag;
 
   &--focused {
     border-color: var(--slr__input-focused-bd-clr);

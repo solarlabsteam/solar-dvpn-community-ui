@@ -7,7 +7,7 @@ export default function useSubscription(): {
   unsubscribe(node: Node): Promise<void>;
 } {
   const store = useStore();
-  const { openTopUpModal } = useAppDialogs();
+  const { openPurchaseModal } = useAppDialogs();
 
   const subscribe = async (node: Node, gbsAmount: number): Promise<boolean> => {
     const amountDeposit = gbsAmount * node.defaultPrice;
@@ -21,7 +21,7 @@ export default function useSubscription(): {
     );
 
     if (status === NodeSubscriptionStatus.NOT_ENOUGH_BALANCE) {
-      openTopUpModal();
+      openPurchaseModal();
     }
 
     return status !== NodeSubscriptionStatus.CANCELED;

@@ -27,21 +27,18 @@
 
 <script setup lang="ts">
 import DvpnNodes from "@/views/NodesView/DvpnNodes.vue";
-import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
+import useAppRouter from "@/hooks/useAppRouter";
 
 const { t } = useI18n();
-const router = useRouter();
+const { openConnectionView, openNodesSearchView } = useAppRouter();
 
 const close = () => {
-  router.push({ name: "home" });
+  openConnectionView();
 };
 
-const search = async () => {
-  await router.push({
-    name: "nodes-search",
-    query: { continentCode: undefined, countryCode: undefined },
-  });
+const search = () => {
+  openNodesSearchView();
 };
 </script>
 

@@ -36,7 +36,7 @@
               class="slr-clickable"
               :icon="'refresh'"
               :size="22"
-              @click="refreshBalance"
+              @click="get"
             />
           </div>
         </template>
@@ -66,7 +66,6 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
 import QrCode from "@/components/app/QrCode";
 import SlrClipboardText from "@/components/ui/SlrClipboardText";
@@ -77,21 +76,15 @@ import { network } from "@/constants";
 import useWallet from "@/hooks/useWallet";
 
 const { t } = useI18n();
-const store = useStore();
-const { get } = useWallet();
+const { wallet, get } = useWallet();
 
 const balance = computed<string>(
-  () => `${store.getters.wallet.balance / 1e6} ${network}`
+  () => `${wallet.value.balance / 1e6} ${network}`
 );
-const address = computed<string>(() => store.getters.wallet.address);
-
+const address = computed<string>(() => wallet.value.address);
 const croppedAddress = computed<string>(
   () => `${address.value.slice(0, 9)}...${address.value.slice(-10)}`
 );
-
-const refreshBalance = async () => {
-  await get();
-};
 </script>
 
 <style lang="scss" scoped>

@@ -15,7 +15,7 @@
       :variant="'secondary'"
       :light="true"
       :large="true"
-      @click="start"
+      @click="openSetupActionsView"
     >
       {{ t("account.getStarted") }}
     </slr-button>
@@ -24,14 +24,10 @@
 
 <script lang="ts" setup>
 import { useI18n } from "vue-i18n";
-import { useRouter } from "vue-router";
+import useAppRouter from "@/hooks/useAppRouter";
 
 const { t } = useI18n();
-const router = useRouter();
-
-const start = () => {
-  router.push({ name: "mnemonic-setup" });
-};
+const { openSetupActionsView } = useAppRouter();
 </script>
 
 <style scoped lang="scss">

@@ -89,7 +89,6 @@ watchEffect(() => {
     width: 100%;
     height: 580px;
     padding: 0;
-    -webkit-app-region: no-drag;
   }
 }
 </style>

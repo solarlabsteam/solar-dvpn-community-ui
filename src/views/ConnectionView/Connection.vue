@@ -24,7 +24,7 @@ import { useStore } from "vuex";
 import { computed } from "vue";
 import ConnectionDetails from "./ConnectionDetails";
 import { formatBandwidth } from "@/utils/formatters";
-import type { Bandwidth, Node } from "@/types";
+import type { Bandwidth, Node, Quota } from "@/types";
 import AccountPreview from "@/views/ConnectionView/AccountPreview";
 import ConnectionStatus from "@/views/ConnectionView/ConnectionStatus/ConnectionStatus.vue";
 import ConnectionControls from "@/views/ConnectionView/ConnectionControls/ConnectionControls.vue";
@@ -38,7 +38,7 @@ const displayedNode = computed<Node | undefined>(
   () => store.getters.connectedNode || store.getters.selectedNode
 );
 const isConnected = computed<boolean>(() => store.getters.isConnected);
-const quotaData = computed(() => store.getters.quota);
+const quotaData = computed<Quota>(() => store.getters.quota);
 const bandwidthDownload = computed<Bandwidth>(() =>
   formatBandwidth(displayedNode.value?.bandwidthDownload || 0)
 );
@@ -47,8 +47,8 @@ const bandwidthUpload = computed<Bandwidth>(() =>
 );
 const bandwidthLeft = computed<string>(() =>
   (
-    Number(quotaData.value?.allocatedGb || 0) -
-    Number(quotaData.value?.consumedGb || 0)
+    Number(quotaData.value?.allocated || 0) -
+    Number(quotaData.value?.consumed || 0)
   ).toFixed(2)
 );
 
@@ -71,14 +71,6 @@ store.watch(
     handleSelectedNode();
   }
 );
-//
-// onMounted((): void => {
-//   startStatusPolling();
-// });
-//
-// onUnmounted((): void => {
-//   stopStatusPolling();
-// });
 </script>
 
 <style lang="scss" src="./Connection.scss" scoped />

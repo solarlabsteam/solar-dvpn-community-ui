@@ -1,6 +1,6 @@
 <template>
   <div class="account-preview">
-    <div class="account-preview__icon slr-clickable" @click="openDnsSettings">
+    <div class="account-preview__icon slr-clickable" @click="openSettingsView">
       <slr-icon :icon="'gear'" :size="19" />
     </div>
     <div class="account-preview__info">
@@ -12,10 +12,7 @@
           {{ `${wallet.balance / 1e6} DVPN` }}
         </div>
       </div>
-      <div
-        class="account-preview__icon slr-clickable"
-        @click="openAccountSettings"
-      >
+      <div class="account-preview__icon slr-clickable" @click="openAccountView">
         <slr-icon :icon="'account'" :size="19" />
       </div>
     </div>
@@ -26,10 +23,10 @@
 import { useStore } from "vuex";
 import { computed } from "vue";
 import type { Wallet } from "@/types";
-import useSettings from "@/hooks/useSettings";
+import useAppRouter from "@/hooks/useAppRouter";
 
 const store = useStore();
-const { openAccountSettings, openDnsSettings } = useSettings();
+const { openAccountView, openSettingsView } = useAppRouter();
 
 const wallet = computed<Wallet>(() => store.getters.wallet);
 const croppedAddress = computed<string>(
