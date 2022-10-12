@@ -1,0 +1,27 @@
+.settings-section {
+
+  &__content {
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    @include font-template(15px, 18px, 500);
+  }
+
+  &__header-title {
+    color: var(--slr__title-txt-clr);
+  }
+
+  &__header-subtitle {
+    @include font-template(15px, 18px);
+  }
+
+  &__buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+  }
+}

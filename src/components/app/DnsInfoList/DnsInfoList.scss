@@ -1,0 +1,14 @@
+.dns-info-list {
+
+  &__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--slr__border-clr);
+    padding: 20px 0;
+
+    &:last-child {
+      border-bottom: 0;
+    }
+  }
+}

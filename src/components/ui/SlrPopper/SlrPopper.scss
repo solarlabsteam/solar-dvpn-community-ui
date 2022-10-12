@@ -1,0 +1,21 @@
+.slr-popper {
+  user-select: none;
+}
+
+:deep(.popper) {
+  box-shadow: 0 6px 30px -6px rgba(0, 0, 0, 0.25);
+  border-radius: 4px;
+  padding: 4px 8px;
+  background: rgba(58, 58, 58, 0.8);
+  color: $slr__clr-white-1;
+  @include font-template(12px, 15px)
+}
+
+:deep(.popper #arrow::before) {
+  background: rgba(58, 58, 58, 0.8);
+}
+
+:deep(.popper:hover),
+:deep(.popper:hover > #arrow::before) {
+  background: rgba(58, 58, 58, 0.8);
+}

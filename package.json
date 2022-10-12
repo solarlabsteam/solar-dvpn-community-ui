@@ -1,0 +1,46 @@
+{
+  "name": "solar-dvpn-community-edition",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "vite",
+    "build": "run-p type-check build-only",
+    "preview": "vite preview --port 4173",
+    "build-only": "vite build",
+    "type-check": "vue-tsc --noEmit",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
+  },
+  "dependencies": {
+    "axios": "^0.27.2",
+    "country-code-lookup": "^0.0.20",
+    "date-fns": "^2.29.3",
+    "flagpack": "^1.0.5",
+    "lodash.debounce": "^4.0.8",
+    "qrious": "^4.0.2",
+    "tiny-emitter": "^2.1.0",
+    "tiny-timer": "^1.6.0",
+    "vue": "^3.2.38",
+    "vue-i18n": "^9.2.2",
+    "vue-router": "^4.1.5",
+    "vue3-clipboard": "^1.0.0",
+    "vue3-popper": "^1.5.0",
+    "vuex": "^4.0.2"
+  },
+  "devDependencies": {
+    "@rushstack/eslint-patch": "^1.1.4",
+    "@types/lodash.debounce": "^4.0.7",
+    "@types/node": "^16.11.62",
+    "@vitejs/plugin-vue": "^3.0.3",
+    "@vue/eslint-config-prettier": "^7.0.0",
+    "@vue/eslint-config-typescript": "^11.0.0",
+    "@vue/tsconfig": "^0.1.3",
+    "eslint": "^8.22.0",
+    "eslint-plugin-vue": "^9.3.0",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.7.1",
+    "sass": "^1.55.0",
+    "sass-loader": "^13.0.2",
+    "typescript": "~4.7.4",
+    "vite": "^3.0.9",
+    "vue-tsc": "^0.40.7"
+  }
+}

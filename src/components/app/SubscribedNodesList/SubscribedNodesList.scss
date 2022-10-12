@@ -1,0 +1,17 @@
+.subscribed-nodes-list {
+  overflow-x: auto;
+  height: calc(100vh - 115px);
+  max-height: 810px;
+
+  &__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--slr__border-clr);
+    padding: 16px 0;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+}

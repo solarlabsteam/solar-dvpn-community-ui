@@ -1,0 +1,25 @@
+.nodes-list-header {
+
+  &__header {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--slr__title-txt-clr);
+  }
+
+  &__back-btn {
+    position: absolute;
+    display: flex;
+    align-items: center;
+  }
+
+  &__action {
+    position: absolute;
+    right: 0;
+  }
+
+  &__location {
+    margin: auto;
+  }
+}

@@ -1,0 +1,22 @@
+.dns-info-preview {
+  display: flex;
+  align-items: center;
+  color: var(--slr__title-txt-clr);
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  &__name {
+    margin-bottom: 5px;
+    @include font-template(14px, 16px, 600);
+  }
+
+  &__value {
+    color: var(--slr__txt-clr);
+    @include font-template(11px, 13px, 100);
+  }
+}

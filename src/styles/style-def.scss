@@ -1,0 +1,66 @@
+:root {
+  --slr__body-bg-clr: #{$slr__clr-white};
+  --slr__bg-outline-clr: #e7f6f9;
+
+  --slr__border-clr: rgb(242, 242, 242);
+
+  --slr__txt-clr: #{rgb(141, 141, 146)};
+  --slr__txt-secondary-clr: #{rgb(238, 238, 238)};
+
+  --slr__title-txt-clr: #{$slr__clr-black};
+
+  --slr__connection-btn-bg-primary: rgb(155, 204, 58);
+  --slr__connection-text-secondary-clr: rgb(204, 204, 204);
+  --slr__connection-text-primary-success-clr: #0a84ff;
+  --slr__connection-text-secondary-success-clr: #9dceff;
+  --slr__connection-txt-danger-clr: rgb(255, 69, 58);
+  --slr__connection-card-shadow-danger-clr: rgb(255, 69, 58, 0.15);
+
+  --slr__btn-txt-clr: #{$slr__clr-white};
+
+  --slr__close-window-btn-bg: rgb(255, 95, 87);
+  --slr__hide-window-btn-bg: rgb(254, 188, 46);
+  --slr__resize-window-btn-bg: rgb(40, 200, 64);
+
+  --slr__node-title-clr: #{$slr__clr-black};
+  --slr__node-title-light-clr: rgb(232, 231, 232);
+  --slr__node-info-txt-clr-primary: #0a84ff;
+
+  --slr__link-txt-clr: #0a84ff;
+
+  --slr__search-input-clr: rgba(0, 0, 0, 0.25);
+
+  --slr__tabs-clr: rgba(0, 0, 0, 0.85);
+  --slr--tab-bg-active: #0a84ff;
+
+  --slr__btn-bg-primary: #0a84ff;
+  --slr__btn-text-primary: #{$slr__clr-white};
+
+  --slr__btn-bg-primary-light: #e7f6f9;
+  --slr__btn-text-primary-light: #0a84ff;
+
+  --slr__btn-bg-secondary: rgb(229, 229, 234);
+  --slr__btn-text-secondary: rgb(141, 141, 146);
+
+  --slr__btn-bg-secondary-light: rgb(249, 249, 249);
+  --slr__btn-text-secondary-light: rgb(141, 141, 146);
+
+  --slr__input-bg-clr: rgb(249, 249, 249);
+  --slr__input-txt: #{$slr__clr-black};
+  --slr__input-focused-bd-clr: $slr__clr-blue-4;
+
+  --slr__logout-btn-txt-clr: rgb(255, 59, 48);
+  --slr__logout-btn-bg-clr: rgb(249, 249, 249);
+
+  --slr__controls-bg-clr: rgb(248, 248, 248);
+  --slr__controls-btn-bg-hover-clr: rgb(238, 238, 238);
+  --slr__controls-item-bg-active-clr: rgba(153, 204, 58, 0.15);
+
+  --slr__setup-timer-clr: rgb(79, 81, 80);
+
+  --slr__top-up-offer-bg-clr: rgb(250, 250, 250);
+  --slr__top-up-offer-save-bg-clr: rgb(231, 231, 231);
+  --slr__top-up-offer-bg-active-clr: rgba(215, 254, 142, 0.15);
+
+  --slr__account-balanc-clr: #4f5150;
+}

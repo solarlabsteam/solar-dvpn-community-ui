@@ -1,0 +1,15 @@
+.slr-select {
+  transition: border-color .2s;
+  outline: none;
+  border: 1px solid var(--slr__border-clr);
+  border-radius: 4px;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 11px 12px;
+  background: var(--slr__body-bg-clr);
+  -webkit-app-region: no-drag;
+
+  &--focused {
+    border-color: $slr__clr-blue-6;
+  }
+}

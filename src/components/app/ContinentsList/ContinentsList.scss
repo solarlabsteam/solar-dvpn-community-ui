@@ -1,0 +1,22 @@
+.continents-list {
+  overflow-x: auto;
+  height: 100%;
+  max-height: 810px;
+
+  &__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    height: 82px;
+    padding-left: 15px;
+    background-color: var(--slr__bg-outline-clr);
+
+    &:last-child {
+      margin-bottom: 0;
+      border-bottom: none;
+    }
+  }
+}

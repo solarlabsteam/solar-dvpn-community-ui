@@ -1,0 +1,30 @@
+.nodes-filters-modal {
+  color: var(--slr__title-txt-clr);
+
+  &__select {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    font-weight: 600;
+  }
+
+  &__select-group {
+    display: flex;
+    justify-content: space-between;
+
+    .nodes-filters-modal__select:first-child {
+      margin-right: 15px;
+    }
+  }
+
+  &__controls {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+
+  .slr-select, .slr-input {
+    border-radius: 6px;
+    background-color: var(--slr__border-clr);
+  }
+}

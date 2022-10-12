@@ -1,0 +1,21 @@
+.no-data {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: var(--slr__txt-secondary-clr);
+
+  &__title {
+    margin-top: 27px;
+    margin-bottom: 9px;
+    font-size: 28px;
+    line-height: 34px;
+    font-weight: 600;
+  }
+
+  &__text {
+    font-size: 16px;
+    text-align: center;
+  }
+}

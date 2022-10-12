@@ -1,0 +1,63 @@
+.u-pointer {
+  cursor: pointer;
+}
+
+.text-black {
+  color: $slr__clr-black;
+}
+
+.text-green {
+  color: $slr__clr-green-light-1;
+}
+
+.text-danger {
+  color: $slr__clr-red-light-1;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-capitalize {
+  text-transform: capitalize;
+}
+
+.text-uppercase {
+  text-transform: uppercase;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.h-100 {
+  height: 100%;
+}
+
+.p-relative {
+  position: relative;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.opacity-4 {
+  opacity: .4;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.d-none {
+  display: none;
+}
+
+.align-items-center {
+  align-items: center;
+}

@@ -1,0 +1,30 @@
+@import '~/flagpack/dist/flagpack.css';
+
+.country-preview {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  color: var(--slr__title-txt-clr);
+
+  &__flag {
+    margin-right: 16px;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+  }
+
+  &__title {
+    @include font-template(13px, 16px, 500);
+  }
+
+  &__subtitle {
+    margin-top: 2px;
+    color: var(--slr__txt-clr);
+    @include font-template(10px, 12px);
+  }
+
+  &__arrow {
+    flex-grow: 1;
+    text-align: end;
+  }
+}

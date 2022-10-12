@@ -1,0 +1,43 @@
+.connection-status {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  background: url("/assets/images/world-map-unprotected.svg") center center no-repeat;
+  background-size: 155%;
+
+  &__card-text {
+    text-transform: uppercase;
+    color: var(--slr__txt-clr);
+    @include font-template(12px, 14px, 100);
+  }
+
+  &__card-status-text {
+    text-transform: uppercase;
+    color: var(--slr__connection-txt-danger-clr);
+    @include font-template(19px, 23px, 100);
+  }
+
+  &__card {
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 0 15px 0 var(--slr__connection-card-shadow-danger-clr);
+    border-radius: 40px;
+    padding: 19px 29px 19px 75px;
+    background: var(--slr__body-bg-clr) url("/assets/icons/shield-cross.svg") no-repeat left 28px center;
+    background-size: 27px 34px;
+  }
+
+  &--protected {
+    background-image: url("/assets/images/world-map-protected.svg");
+
+    .connection-status__card {
+      box-shadow: 0 0 15px 0 var(--slr__bg-outline-clr);
+      background-image: url("/assets/icons/shield-check.svg");
+    }
+
+    .connection-status__card-status-text {
+      color: var(--slr__node-info-txt-clr-primary);
+    }
+  }
+}

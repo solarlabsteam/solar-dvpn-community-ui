@@ -1,0 +1,52 @@
+@import "./mixins/font";
+
+// Typography classes
+// .<weight>-s<font-size>-lh<line-height>
+
+.s-s11-lh13 {
+    @include font-template(11px, 13px, 600)
+}
+
+.r-s11-lh13 {
+    @include font-template(11px, 13px)
+}
+
+.r-s12-lh15 {
+    @include font-template(12px, 15px)
+}
+
+.m-s12-lh15 {
+    @include font-template(12px, 15px, 500)
+}
+
+.r-s13-lh16 {
+    @include font-template(13px, 16px);
+}
+
+.r-s17-lh20 {
+    @include font-template(17px, 20px);
+}
+
+.m-s13-lh16 {
+    @include font-template(13px, 16px, 500);
+}
+
+.m-s14-lh17 {
+    @include font-template(14px, 17px, 500);
+}
+
+.b-s17-lh20 {
+    @include font-template(17px, 20px, 700);
+}
+
+.m-s18-lh22 {
+    @include font-template(18px, 22px, 500);
+}
+
+.m-s20-lh24 {
+    @include font-template(20px, 24px, 500);
+}
+
+.s-s32-lh35 {
+    @include font-template(32px, 35px, 600);
+}

@@ -1,0 +1,35 @@
+.setup-mnemonic {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 60% 16px 16px;
+  background-image: url(./assets/icons/mnemonic.svg);
+  background-position: top 15% center;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  text-align: center;
+  width: 100%;
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+
+  &__title {
+    margin-bottom: 13px;
+    color: var(--slr__title-txt-clr);
+    @include font-template(28px, 34px, 500);
+  }
+
+  &__text {
+    @include font-template(16px, 22px);
+  }
+
+  &__buttons {
+    width: 100%;
+  }
+}

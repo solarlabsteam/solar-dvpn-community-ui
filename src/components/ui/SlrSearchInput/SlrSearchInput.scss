@@ -1,0 +1,14 @@
+.slr-search-input {
+  display: flex;
+  border: 1px solid var(--slr__border-clr);
+  border-radius: 6px;
+  padding: 5px 0 5px 30px ;
+  background: url("/assets/icons/magnifyingglass.svg") left 7px center no-repeat;
+  background-size: 20px 16px;
+  font-size: 13px;
+  line-height: 16px;
+
+  &::placeholder {
+    color: var(--slr__search-input-clr);
+  }
+}

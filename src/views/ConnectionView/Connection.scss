@@ -1,0 +1,47 @@
+.connection-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  box-sizing: border-box;
+
+  &__header-wrapper {
+    align-self: end;
+    margin-bottom: 45px;
+    padding-right: 15px;
+  }
+
+  &__content-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    align-self: stretch;
+  }
+
+  &__status {
+    height: 75%;
+  }
+
+  &__details {
+    height: 25%;
+  }
+
+  &__quota-message {
+    text-align: center;
+    text-transform: uppercase;
+    color: $slr__clr-grey-dark-1;
+  }
+
+  &__node {
+    margin-bottom: 40px;
+    padding: 0 30px;
+  }
+
+  &__quota-wrapper {
+    margin-bottom: 50px;
+  }
+}

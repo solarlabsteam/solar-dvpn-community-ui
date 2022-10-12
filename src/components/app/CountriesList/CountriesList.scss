@@ -1,0 +1,19 @@
+.countries-list {
+  overflow-x: auto;
+  height: 100%;
+  // max-height: 850px;
+  // padding: 0 0 16px;
+  // box-sizing: border-box;
+
+  &__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--slr__border-clr);
+    padding: 16px 0;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+}

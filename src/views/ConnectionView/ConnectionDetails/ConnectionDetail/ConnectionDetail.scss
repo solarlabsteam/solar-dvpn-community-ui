@@ -1,0 +1,39 @@
+.connection-detail {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  &__value {
+    margin-top: 16px;
+    margin-bottom: 5px;
+  }
+
+  &__amount {
+    color: var(--slr__txt-clr);
+    @include font-template(24px, 29px, 100);
+  }
+
+  &__units {
+    color: var(--slr__connection-text-secondary-clr);
+    @include font-template(12px, 14px, 100);
+  }
+
+  &__type {
+    text-transform: uppercase;
+    color: var(--slr__connection-text-secondary-clr);
+
+    @include font-template(10px, 12px, 100);
+  }
+
+  &--connected {
+
+    .connection-detail__amount {
+      color: var(--slr__connection-text-primary-success-clr);
+    }
+
+    .connection-detail__units {
+      color: var(--slr__connection-text-secondary-success-clr);
+    }
+  }
+}

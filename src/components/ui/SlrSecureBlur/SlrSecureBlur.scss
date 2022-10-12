@@ -1,0 +1,31 @@
+.slr-secure-blur {
+  position: relative;
+
+  &__target {
+    -webkit-transition : -webkit-filter 100ms linear;
+
+    &--blurred {
+      filter: blur(4px);
+    }
+  }
+
+  &__overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__button-wrapper {
+    z-index: 1;
+    top: calc(50% - 10px);
+    padding: 10px 8px;
+    background: var(--slr__body-bg-clr);
+    border-radius: 6px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  }
+}
