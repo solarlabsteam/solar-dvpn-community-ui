@@ -5,11 +5,15 @@ import connectionService from "@/services/ConnectionService";
 interface ConnectionState {
   isConnectionLoading: boolean;
   isConnected: boolean;
+  isStopSessionsInProgress: boolean;
+  isResetConfigurationInProgress: boolean;
 }
 
 const getDefaultState = (): ConnectionState => ({
   isConnectionLoading: false,
   isConnected: false,
+  isStopSessionsInProgress: false,
+  isResetConfigurationInProgress: false,
 });
 
 export default {
@@ -19,6 +23,10 @@ export default {
     isConnectionLoading: (state: ConnectionState): boolean =>
       state.isConnectionLoading,
     isConnected: (state: ConnectionState): boolean => state.isConnected,
+    isStopSessionsInProgress: (state: ConnectionState): boolean =>
+      state.isStopSessionsInProgress,
+    isResetConfigurationInProgress: (state: ConnectionState): boolean =>
+      state.isResetConfigurationInProgress,
   },
 
   actions: {
@@ -48,19 +56,29 @@ export default {
       }
     },
 
-    async stopSessions({ commit, dispatch }): Promise<void> {
+    async stopSessions({ commit }): Promise<void> {
+      commit(ConnectionMutationTypes.SET_STOP_SESSIONS_LOADING_STATE, true);
+
       try {
         await connectionService.queryStopSessions();
       } finally {
-
+        commit(ConnectionMutationTypes.SET_STOP_SESSIONS_LOADING_STATE, false);
       }
     },
 
-    async resetConfiguration({ commit, dispatch }): Promise<void> {
+    async resetConfiguration({ commit }): Promise<void> {
+      commit(
+        ConnectionMutationTypes.SET_RESET_CONFIGURATION_LOADING_STATE,
+        true
+      );
+
       try {
         await connectionService.queryResetConfiguration();
       } finally {
-
+        commit(
+          ConnectionMutationTypes.SET_RESET_CONFIGURATION_LOADING_STATE,
+          false
+        );
       }
     },
 
@@ -76,11 +94,26 @@ export default {
     ): void {
       state.isConnectionLoading = value;
     },
+
     [ConnectionMutationTypes.SET_CONNECTION_STATE](
       state,
       value: boolean
     ): void {
       state.isConnected = value;
+    },
+
+    [ConnectionMutationTypes.SET_STOP_SESSIONS_LOADING_STATE](
+      state,
+      value: boolean
+    ): void {
+      state.isStopSessionsInProgress = value;
+    },
+
+    [ConnectionMutationTypes.SET_RESET_CONFIGURATION_LOADING_STATE](
+      state,
+      value: boolean
+    ): void {
+      state.isResetConfigurationInProgress = value;
     },
   },
 } as Module<ConnectionState, any>;

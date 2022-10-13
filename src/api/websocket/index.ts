@@ -42,19 +42,19 @@ class WebsocketProvider {
   }
 
   private onOpen(event: any): void {
-    setError(`WEBSOCKET OPENED ${JSON.stringify(event)}`);
+    setError(`WEBSOCKET OPENED ${JSON.stringify(event)} ${event.data}`);
   }
 
   private onMessage(event: any): void {
-    setError(`WEBSOCKET MSG ${JSON.stringify(event)}`);
+    setError(`WEBSOCKET MSG ${JSON.stringify(event)} ${event.data}`);
   }
 
   private onError(event: any): void {
-    setError(`WEBSOCKET ERROR ${JSON.stringify(event)}`);
+    setError(`WEBSOCKET ERROR ${JSON.stringify(event)} ${event.data}`);
   }
 
   private onClose(event: any): void {
-    setError(`WEBSOCKET CLOSE ${JSON.stringify(event)}`);
+    setError(`WEBSOCKET CLOSE ${JSON.stringify(event)} ${event.data}`);
   }
 }
 

@@ -19,7 +19,14 @@
         {{ t("settings.stopSessions.text") }}
       </template>
       <template #buttons>
-        <slr-button :variant="'danger'" :block="true" :large="true">
+        <slr-button
+          :variant="'danger'"
+          :block="true"
+          :large="true"
+          :disabled="isStopSessionsInProgress"
+          :loading="isStopSessionsInProgress"
+          @click="stopSessions"
+        >
           {{ t("settings.stopSessions.button") }}
         </slr-button>
       </template>
@@ -29,7 +36,14 @@
         {{ t("settings.removeConfigurations.text") }}
       </template>
       <template #buttons>
-        <slr-button :variant="'danger'" :block="true" :large="true">
+        <slr-button
+          :variant="'danger'"
+          :block="true"
+          :large="true"
+          :disabled="isResetConfigurationInProgress"
+          :loading="isResetConfigurationInProgress"
+          @click="resetConfiguration"
+        >
           {{ t("settings.removeConfigurations.button") }}
         </slr-button>
       </template>
@@ -43,10 +57,17 @@ import SettingsSection from "@/components/app/SettingsSection/SettingsSection.vu
 import { useI18n } from "vue-i18n";
 import useAppRouter from "@/hooks/useAppRouter";
 import useDns from "@/hooks/useDns";
+import useConnection from "@/hooks/useConnection";
 
 const { t } = useI18n();
 const { openSettingsDnsView } = useAppRouter();
 const { selectedDns } = useDns();
+const {
+  isStopSessionsInProgress,
+  isResetConfigurationInProgress,
+  stopSessions,
+  resetConfiguration,
+} = useConnection();
 
 const openDnsSettings = () => {
   openSettingsDnsView();

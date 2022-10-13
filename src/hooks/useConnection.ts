@@ -6,11 +6,15 @@ import useSubscription from "@/hooks/useSubscription";
 import useAppRouter from "@/hooks/useAppRouter";
 
 export default function useConnection(): {
+  isConnected: ComputedRef<boolean>;
+  isConnectionLoading: ComputedRef<boolean>;
+  isStopSessionsInProgress: ComputedRef<boolean>;
+  isResetConfigurationInProgress: ComputedRef<boolean>;
   select(node: Node): Promise<void>;
   connect(node: Node): Promise<void>;
   disconnect(): Promise<void>;
-  isConnected: ComputedRef<boolean>;
-  isConnectionLoading: ComputedRef<boolean>;
+  stopSessions(): Promise<void>;
+  resetConfiguration(): Promise<void>;
 } {
   const store = useStore();
   const { openConnectionView } = useAppRouter();
@@ -21,6 +25,12 @@ export default function useConnection(): {
     () => store.getters.isConnectionLoading
   );
   const isConnected = computed<boolean>(() => store.getters.isConnected);
+  const isStopSessionsInProgress = computed<boolean>(
+    () => store.getters.isStopSessionsInProgress
+  );
+  const isResetConfigurationInProgress = computed<boolean>(
+    () => store.getters.isResetConfigurationInProgress
+  );
 
   const handleNodeSelection = async (
     node: Node,
@@ -68,5 +78,23 @@ export default function useConnection(): {
     await store.dispatch("disconnectFromNode");
   };
 
-  return { select, connect, disconnect, isConnectionLoading, isConnected };
+  const stopSessions = async (): Promise<void> => {
+    await store.dispatch("stopSessions");
+  };
+
+  const resetConfiguration = async (): Promise<void> => {
+    await store.dispatch("resetConfiguration");
+  };
+
+  return {
+    isConnectionLoading,
+    isConnected,
+    isStopSessionsInProgress,
+    isResetConfigurationInProgress,
+    select,
+    connect,
+    disconnect,
+    stopSessions,
+    resetConfiguration,
+  };
 }
