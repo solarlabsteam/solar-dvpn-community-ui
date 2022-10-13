@@ -1,15 +1,14 @@
 import { useStore } from "vuex";
-import type { Wallet, WalletProfile } from "@/types";
+import type { Wallet } from "@/types";
 import { computed, type ComputedRef } from "vue";
 
 export default function useWallet(): {
   wallet: ComputedRef<Wallet>;
   isWalletLoading: ComputedRef<boolean>;
-  isLogoutLoading: ComputedRef<boolean>;
-  create(): Promise<WalletProfile>;
+  create(): Promise<string>;
   get(): Promise<void>;
   recover(mnemonic: string): Promise<void>;
-  logout(): Promise<void>;
+  remove(): Promise<void>;
 } {
   const store = useStore();
 
@@ -17,11 +16,8 @@ export default function useWallet(): {
   const isWalletLoading = computed<boolean>(
     () => store.getters.isWalletLoading
   );
-  const isLogoutLoading = computed<boolean>(
-    () => store.getters.isLogoutLoading
-  );
 
-  const create = async (): Promise<WalletProfile> => {
+  const create = async (): Promise<string> => {
     return await store.dispatch("createWallet");
   };
 
@@ -33,17 +29,16 @@ export default function useWallet(): {
     await store.dispatch("recoverWallet", mnemonic);
   };
 
-  const logout = async (): Promise<void> => {
+  const remove = async (): Promise<void> => {
     await store.dispatch("deleteWallet");
   };
 
   return {
     wallet,
     isWalletLoading,
-    isLogoutLoading,
     create,
     get,
     recover,
-    logout,
+    remove,
   };
 }

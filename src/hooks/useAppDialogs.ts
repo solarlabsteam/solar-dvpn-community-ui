@@ -4,12 +4,17 @@ import type { Node } from "@/types";
 export default function useAppDialogs(): {
   openPurchaseModal(): void;
   openSubscriptionModal(node: Node): void;
+  openUnsubscriptionModal(node: Node): void;
   openNodesFiltersModal(): void;
 } {
   const emitter = useGlobalEmitter();
 
   const openSubscriptionModal = (node: Node): void => {
     emitter.$emit("open-subscription-modal", node);
+  };
+
+  const openUnsubscriptionModal = (node: Node): void => {
+    emitter.$emit("open-unsubscription-modal", node);
   };
 
   const openPurchaseModal = (): void => {
@@ -20,5 +25,10 @@ export default function useAppDialogs(): {
     emitter.$emit("open-nodes-filters-modal");
   };
 
-  return { openPurchaseModal, openSubscriptionModal, openNodesFiltersModal };
+  return {
+    openPurchaseModal,
+    openSubscriptionModal,
+    openUnsubscriptionModal,
+    openNodesFiltersModal,
+  };
 }

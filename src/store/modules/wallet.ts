@@ -56,29 +56,18 @@ export default {
       }
     },
 
-    async deleteWallet({ commit, dispatch }): Promise<void> {
-      commit(AccountMutationTypes.SET_LOG_OUT_LOADING_STATE, true);
+    async deleteWallet({ commit }): Promise<void> {
+      commit(AccountMutationTypes.SET_WALLET_LOADING_STATE, true);
 
       try {
         await walletService.deleteWallet();
-        await dispatch("resetStates");
       } finally {
-        commit(AccountMutationTypes.SET_LOG_OUT_LOADING_STATE, false);
+        commit(AccountMutationTypes.SET_WALLET_LOADING_STATE, false);
       }
     },
 
     async resetWalletState({ commit }) {
       commit(AccountMutationTypes.RESET_WALLET_STATE);
-    },
-
-    async resetStates({ dispatch }): Promise<void> {
-      await Promise.allSettled([
-        dispatch("resetNodeState"),
-        dispatch("resetQuotaState"),
-        dispatch("resetSubscriptionState"),
-        dispatch("resetSettingsState"),
-        dispatch("resetWalletState"),
-      ]);
     },
   },
 
@@ -88,13 +77,6 @@ export default {
       value: Wallet
     ): void {
       state.wallet = value;
-    },
-
-    [AccountMutationTypes.SET_LOG_OUT_LOADING_STATE](
-      state: AccountState,
-      value: boolean
-    ): void {
-      state.isLogoutLoading = value;
     },
 
     [AccountMutationTypes.SET_WALLET_LOADING_STATE](

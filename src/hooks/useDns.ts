@@ -7,7 +7,8 @@ function useDns(): {
   selectedDns: ComputedRef<DnsInfo>;
   dnsConfigurations: ComputedRef<DnsInfo[]>;
   isDnsConfigurationsLoading: ComputedRef<boolean>;
-  selectDns(dns: DnsInfo): void;
+  selectDns(dns: DnsInfo): Promise<void>;
+  loadDnsConfigurations(): Promise<void>;
 } {
   const store = useStore();
 
@@ -19,8 +20,12 @@ function useDns(): {
     () => store.getters.dnsConfigurationsLoadingState
   );
 
-  const selectDns = (info: DnsInfo): void => {
-    store.dispatch("selectDns", info);
+  const selectDns = async (info: DnsInfo): Promise<void> => {
+    await store.dispatch("selectDns", info);
+  };
+
+  const loadDnsConfigurations = async (): Promise<void> => {
+    await store.dispatch("fetchDnsConfigurations");
   };
 
   return {
@@ -28,6 +33,7 @@ function useDns(): {
     dnsConfigurations,
     isDnsConfigurationsLoading,
     selectDns,
+    loadDnsConfigurations,
   };
 }
 

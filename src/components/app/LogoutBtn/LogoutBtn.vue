@@ -1,8 +1,8 @@
 <template>
   <slr-button
     :block="true"
-    :loading="isLogoutLoading"
-    :disabled="isLogoutLoading"
+    :loading="isLogoutInProgress || isWalletLoading"
+    :disabled="isLogoutInProgress || isWalletLoading"
     :large="true"
     :variant="'danger'"
     @click="logoutWallet"
@@ -15,16 +15,19 @@
 </template>
 
 <script setup lang="ts">
-import useWallet from "@/hooks/useWallet";
 import useAppRouter from "@/hooks/useAppRouter";
 import useError from "@/hooks/useError";
+import useAppSettings from "@/hooks/useAppSettings";
+import useWallet from "@/hooks/useWallet";
 
 const { openSetupGreetingView } = useAppRouter();
-const { logout, isLogoutLoading } = useWallet();
+const { isWalletLoading, remove } = useWallet();
+const { isLogoutInProgress, logout } = useAppSettings();
 const { setError } = useError();
 
 const logoutWallet = () => {
-  logout()
+  remove()
+    .then(logout)
     .then(openSetupGreetingView)
     .catch((e) => setError(JSON.stringify(e)));
 };

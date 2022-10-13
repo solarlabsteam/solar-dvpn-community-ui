@@ -2,8 +2,12 @@ import type { RegistryValue } from "@/types";
 import registryApi from "@/api/rest/RegistryApi";
 
 class RegistryService {
-  queryValue(key: string): Promise<RegistryValue> {
-    return registryApi.getValue(key);
+  async queryValue(key: string): Promise<RegistryValue | null> {
+    try {
+      return await registryApi.getValue(key);
+    } catch (e) {
+      return null;
+    }
   }
 
   querySetValue(key: string, value: string, isSecured: boolean): Promise<void> {

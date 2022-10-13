@@ -26,28 +26,26 @@ import {
   onErrorCaptured,
   watch,
 } from "vue";
-import { useStore } from "vuex";
 import LoadingOverlay from "@/components/app/LoadingOverlay";
 import SubscriptionModal from "@/components/app/SubscriptionModal";
 import NodesFiltersModal from "@/components/app/NodesFiltersModal";
 import useError from "@/hooks/useError";
 import { wsProvider } from "@/api";
+import useDns from "@/hooks/useDns";
+import useWallet from "@/hooks/useWallet";
+import useAppSettings from "@/hooks/useAppSettings";
+import useAppRouter from "@/hooks/useAppRouter";
+import useNodes from "@/hooks/useNodes";
 
-const store = useStore();
-const selectedNode = computed<Node>(() => store.getters.selectedNode);
-const isDnsConfigurationsLoading = computed<boolean>(
-  () => store.getters.dnsConfigurationsLoadingState
-);
-const isDefaultNodeLoading = computed<boolean>(
-  () => store.getters.isDefaultNodeLoading
-);
-const isLogoutInProcess = computed<boolean>(
-  () => store.getters.isLogoutLoading
-);
+const { isDnsConfigurationsLoading, loadDnsConfigurations } = useDns();
+const { get } = useWallet();
+const { openSetupGreetingView, openConnectionView } = useAppRouter();
+const { isAuthorized, isAppSetupInProgress, setupApp } = useAppSettings();
+const { isDefaultNodeLoading, selectDefaultNode, loadContinents } = useNodes();
 
 const isAppLoading = computed<boolean>(
   () =>
-    isLogoutInProcess.value ||
+    isAppSetupInProgress.value ||
     isDefaultNodeLoading.value ||
     isDnsConfigurationsLoading.value
 );
@@ -58,19 +56,35 @@ const resetError = () => {
   setError(undefined);
 };
 
+const loadData = () => {
+  Promise.allSettled([
+    get(),
+    selectDefaultNode(),
+    loadContinents(),
+    loadDnsConfigurations(),
+  ])
+    .then((results) => {
+      results
+        .filter((result) => result.status === "rejected")
+        .forEach((result) =>
+          setError(JSON.stringify((result as PromiseRejectedResult).reason))
+        );
+      wsProvider.openConnection();
+    })
+    .catch((e) => setError(JSON.stringify(e)));
+};
+
 onBeforeMount(() => {
-  store.dispatch("getWallet").catch((e) => {
-    setError(e.message);
-  });
-  store.dispatch("selectDefaultNode").catch((e) => {
-    setError(e.message);
-  });
-  store.dispatch("fetchNodes").catch((e) => {
-    setError(e.message);
-  });
-  store.dispatch("fetchDnsConfigurations").catch((e) => {
-    setError(e.message);
-  });
+  setupApp()
+    .then(() => {
+      if (isAuthorized.value) {
+        openConnectionView();
+        loadData();
+      } else {
+        openSetupGreetingView();
+      }
+    })
+    .catch((e) => setError(JSON.stringify(e)));
 });
 
 onBeforeUnmount(() => {
@@ -81,25 +95,7 @@ onErrorCaptured((e) => {
   setError(`APP ${JSON.stringify(e)}`);
 });
 
-watch(
-  () => store.getters.wallet,
-  (wallet) => {
-    if (!wallet) return;
-    if (!selectedNode.value) {
-      store.dispatch("selectDefaultNode").catch((e) => {
-        setError(e.message);
-      });
-    } else {
-      store.dispatch("fetchSubscribedNodes").catch((e) => {
-        setError(e.message);
-      });
-    }
-    store.dispatch("fetchContinents").catch((e) => {
-      setError(e.message);
-    });
-    wsProvider.openConnection();
-  }
-);
+watch(() => isAuthorized.value, loadData);
 </script>
 
 <style lang="scss">

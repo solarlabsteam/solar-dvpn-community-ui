@@ -46,7 +46,6 @@ import { useI18n } from "vue-i18n";
 import useWallet from "@/hooks/useWallet";
 import useError from "@/hooks/useError";
 import useAppRouter from "@/hooks/useAppRouter";
-import type { WalletProfile } from "@/types";
 
 const { t } = useI18n();
 const { isWalletLoading, create } = useWallet();
@@ -55,7 +54,7 @@ const { setError } = useError();
 
 const onCreate = () => {
   create()
-    .then((wallet: WalletProfile) => openSetupCreateView(wallet.mnemonic))
+    .then((mnemonic: string) => openSetupCreateView(mnemonic))
     .catch((e) => setError(JSON.stringify(e)));
 };
 </script>

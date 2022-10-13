@@ -49,11 +49,19 @@ export default {
     },
 
     async stopSessions({ commit, dispatch }): Promise<void> {
-      await connectionService.queryStopSessions();
+      try {
+        await connectionService.queryStopSessions();
+      } finally {
+
+      }
     },
 
     async resetConfiguration({ commit, dispatch }): Promise<void> {
-      await connectionService.queryResetConfiguration();
+      try {
+        await connectionService.queryResetConfiguration();
+      } finally {
+
+      }
     },
 
     setConnectionLoadingState({ commit }, value): void {

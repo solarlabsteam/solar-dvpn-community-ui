@@ -7,16 +7,11 @@ import {
   type CountryCodeToContinentCode,
   type CountryInfo,
   type CountryNodesInfo,
-  type Node,
   type NodesData,
   type NodesSearchParameters,
 } from "@/types";
 
 class NodeService {
-  async queryNode(address: string): Promise<Node> {
-    return (await nodesApi.getNodesByAddresses([address])).items[0];
-  }
-
   querySubscribedNodes(addresses: string[], page?: number): Promise<NodesData> {
     if (addresses.length === 0) {
       return Promise.resolve({
