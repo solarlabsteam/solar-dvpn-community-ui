@@ -47,8 +47,9 @@ const bandwidthUpload = computed<Bandwidth>(() =>
 );
 const bandwidthLeft = computed<string>(() =>
   (
-    Number(quotaData.value?.allocated || 0) -
-    Number(quotaData.value?.consumed || 0)
+    (Number(quotaData.value?.allocated || 0) -
+      Number(quotaData.value?.consumed || 0)) /
+    1e9
   ).toFixed(2)
 );
 

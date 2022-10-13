@@ -66,8 +66,8 @@ const isLoadingFailed = computed<boolean>(
 const loadMore = () => {
   if (store.getters.isMoreNodesAvailable && !store.getters.isNodesLoading) {
     store.dispatch("fetchMoreNodes", {
-      countryCode: displayedCountry.value,
-      continentCode: displayedContinent.value,
+      country: displayedCountry.value,
+      continent: displayedContinent.value,
       query: searchString.value,
     });
   }
@@ -82,10 +82,20 @@ watch(
   (countryCode) => countryCode && fetchNodes({ country: countryCode })
 );
 
-watch(searchString, (query) => {
-  store.dispatch("setFilters", {
+watch(searchString, async (query) => {
+  await store.dispatch("setFilters", {
     ...store.getters.filters,
     query,
+  });
+  const { countryCode, continentCode, orderBy, minPrice, maxPrice } =
+    store.getters.filters;
+  await store.dispatch("fetchNodes", {
+    query,
+    country: countryCode,
+    continent: continentCode,
+    minPrice: Number(minPrice) * 1e6,
+    maxPrice: Number(maxPrice) * 1e6,
+    orderBy,
   });
 });
 </script>

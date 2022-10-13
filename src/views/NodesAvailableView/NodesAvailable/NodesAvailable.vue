@@ -80,8 +80,8 @@ const openCountry = (code: string) => {
 const loadMore = () => {
   if (store.getters.isMoreNodesAvailable && !store.getters.isNodesLoading) {
     store.dispatch("fetchMoreNodes", {
-      countryCode: props.countryCode,
-      continentCode: props.continentCode,
+      country: props.countryCode,
+      continent: props.continentCode,
     });
   }
 };

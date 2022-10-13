@@ -21,6 +21,7 @@ import ContinentsList from "@/components/app/ContinentsList/ContinentsList.vue";
 import type { ContinentCode } from "@/types";
 import useAppRouter from "@/hooks/useAppRouter";
 import useNodes from "@/hooks/useNodes";
+import SubscribedNodes from "@/views/NodesView/tabs/SubscribedNodes.vue";
 
 const { t } = useI18n();
 const { openNodesAvailableView } = useAppRouter();

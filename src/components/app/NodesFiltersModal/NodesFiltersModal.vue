@@ -164,13 +164,13 @@ const applyFilters = async () => {
   } as NodesFilters);
   await store.dispatch("fetchNodes", {
     query: query.value,
-    countryCode: country.value === "any" ? undefined : country.value,
-    continentCode:
+    country: country.value === "any" ? undefined : country.value,
+    continent:
       continent.value === "any"
         ? undefined
         : (continent.value as ContinentCode),
-    minPrice: Number(minPrice.value) * 1e4,
-    maxPrice: Number(maxPrice.value) * 1e4,
+    minPrice: Number(minPrice.value) * 1e6,
+    maxPrice: Number(maxPrice.value) * 1e6,
     orderBy: order.value,
   } as NodesSearchParameters);
 
