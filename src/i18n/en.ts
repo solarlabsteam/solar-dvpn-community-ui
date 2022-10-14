@@ -137,6 +137,7 @@ export default {
     back: "Back",
     done: "Done",
     subscribe: "Subscribe",
+    unsubscribe: "Unsubscribe",
     continue: "Continue",
     filter: "Filter",
     cancel: "Cancel",
@@ -151,6 +152,11 @@ export default {
   subscriptionModal: {
     header: "Subscribe to",
     priceMessage: "will be paid upfront to node provider",
+  },
+
+  unsubscriptionModal: {
+    header: "Unsubscribe",
+    message: "Are you sure to unsubscribe from {name}?",
   },
 
   nodesFiltersModal: {

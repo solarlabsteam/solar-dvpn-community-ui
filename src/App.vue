@@ -13,6 +13,10 @@
     </transition>
 
     <transition name="modal">
+      <unsubscription-modal />
+    </transition>
+
+    <transition name="modal">
       <nodes-filters-modal />
     </transition>
   </template>
@@ -37,6 +41,7 @@ import useAppSettings from "@/hooks/useAppSettings";
 import useAppRouter from "@/hooks/useAppRouter";
 import useNodes from "@/hooks/useNodes";
 import useConnection from "@/hooks/useConnection";
+import UnsubscriptionModal from "@/components/app/UnsubscriptionModal";
 
 const { isDnsConfigurationsLoading, loadDnsConfigurations } = useDns();
 const { get } = useWallet();

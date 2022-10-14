@@ -2,7 +2,6 @@ import { useStore } from "vuex";
 import { computed, type ComputedRef } from "vue";
 import { type Node, NodeSelectionStatus, NodeStatus } from "@/types";
 import useAppDialogs from "@/hooks/useAppDialogs";
-import useSubscription from "@/hooks/useSubscription";
 import useAppRouter from "@/hooks/useAppRouter";
 
 export default function useConnection(): {
@@ -19,8 +18,7 @@ export default function useConnection(): {
 } {
   const store = useStore();
   const { openConnectionView } = useAppRouter();
-  const { unsubscribe } = useSubscription();
-  const { openSubscriptionModal } = useAppDialogs();
+  const { openSubscriptionModal, openUnsubscriptionModal } = useAppDialogs();
 
   const isConnectionLoading = computed<boolean>(
     () => store.getters.isConnectionLoading
@@ -67,7 +65,7 @@ export default function useConnection(): {
     if (node.status === NodeStatus.active) {
       await handleNodeSelection(node, false);
     } else {
-      await unsubscribe(node);
+      openUnsubscriptionModal(node);
     }
   };
 

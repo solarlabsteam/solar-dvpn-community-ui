@@ -57,7 +57,6 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { useStore } from "vuex";
 import useGlobalEmitter from "@/hooks/useGlobalEmitter";
 import GbsInput from "@/components/app/GbsInput";
 import type { Node } from "@/types";
@@ -71,8 +70,7 @@ import useAppRouter from "@/hooks/useAppRouter";
 
 const { t } = useI18n();
 const emitter = useGlobalEmitter();
-const { subscribe } = useSubscription();
-const store = useStore();
+const { isSubscribingLoading, subscribe } = useSubscription();
 const { setError } = useError();
 const { openConnectionView } = useAppRouter();
 
@@ -80,9 +78,6 @@ const isOpen = ref(false);
 const amountGb = ref<number>(1);
 const node = ref<Node>();
 
-const isSubscribingLoading = computed<boolean>(
-  () => store.getters.isSubscribingLoading || store.getters.isBalancesLoading
-);
 const formattedPrice = computed<string>(
   () =>
     `${(

@@ -31,15 +31,13 @@ import SubscribedNodesList from "@/components/app/SubscribedNodesList/Subscribed
 import NoData from "@/components/app/NoData";
 import SlrLinearLoader from "@/components/ui/SlrLinearLoader";
 import type { Node } from "@/types";
-import useError from "@/hooks/useError";
-import useSubscription from "@/hooks/useSubscription";
 import useConnection from "@/hooks/useConnection";
+import useAppDialogs from "@/hooks/useAppDialogs";
 
 const store = useStore();
 const { t } = useI18n();
 const { select } = useConnection();
-const { setError } = useError();
-const { unsubscribe } = useSubscription();
+const { openUnsubscriptionModal } = useAppDialogs();
 
 const selectTab = inject<Function>("selectTab");
 
@@ -54,11 +52,7 @@ const isLoading = computed<boolean>(
 );
 
 const unsubscribeFromNode = async (node: Node) => {
-  try {
-    await unsubscribe(node);
-  } catch (e) {
-    setError(JSON.stringify(e));
-  }
+  openUnsubscriptionModal(node);
 };
 
 const fetchSubscribedNodes = () => store.dispatch("fetchSubscribedNodes");

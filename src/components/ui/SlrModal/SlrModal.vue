@@ -11,14 +11,6 @@
       <div class="slr-modal__container">
         <div class="slr-modal__header">
           <slot name="header"> default header </slot>
-          <slr-button
-            v-if="!loading"
-            :text="true"
-            class="slr-modal__close-button"
-            @click="close"
-          >
-            &times;
-          </slr-button>
         </div>
 
         <div class="slr-modal__body">
