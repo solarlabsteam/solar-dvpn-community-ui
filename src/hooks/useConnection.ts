@@ -15,6 +15,7 @@ export default function useConnection(): {
   disconnect(): Promise<void>;
   stopSessions(): Promise<void>;
   resetConfiguration(): Promise<void>;
+  setConnectionState(value: boolean): Promise<void>;
 } {
   const store = useStore();
   const { openConnectionView } = useAppRouter();
@@ -70,6 +71,11 @@ export default function useConnection(): {
     }
   };
 
+  const setConnectionState = async (value: boolean): Promise<void> => {
+    await store.dispatch("setConnectionState", value);
+    await store.dispatch("setConnectionLoadingState", false);
+  };
+
   const connect = async (node: Node): Promise<void> => {
     return await handleNodeSelection(node, true);
   };
@@ -96,5 +102,6 @@ export default function useConnection(): {
     disconnect,
     stopSessions,
     resetConfiguration,
+    setConnectionState,
   };
 }

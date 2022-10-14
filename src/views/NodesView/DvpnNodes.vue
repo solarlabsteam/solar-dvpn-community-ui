@@ -17,7 +17,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
-import ContinentsList from "@/components/app/ContinentsList/ContinentsList.vue";
+import ContinentsList from "@/components/app/ContinentsList";
 import SubscribedNodes from "@/views/NodesView/tabs/SubscribedNodes.vue";
 import type { ContinentCode } from "@/types";
 import useAppRouter from "@/hooks/useAppRouter";

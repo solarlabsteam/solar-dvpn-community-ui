@@ -33,27 +33,21 @@ export default {
     async connectToNode({ commit, dispatch, getters }): Promise<void> {
       commit(ConnectionMutationTypes.SET_CONNECTION_LOADING_STATE, true);
 
-      try {
-        await connectionService.queryConnectToNode(
-          getters.selectedNode.blockchainAddress
-        );
-        dispatch("setConnectedNode", getters.selectedNode);
-        commit(ConnectionMutationTypes.SET_CONNECTION_STATE, true);
-      } finally {
-        commit(ConnectionMutationTypes.SET_CONNECTION_LOADING_STATE, false);
-      }
+      await connectionService.queryConnectToNode(
+        getters.selectedNode.blockchainAddress
+      );
+      await dispatch("setConnectedNode", getters.selectedNode);
     },
 
     async disconnectFromNode({ commit, dispatch }): Promise<void> {
       commit(ConnectionMutationTypes.SET_CONNECTION_LOADING_STATE, true);
 
-      try {
-        await connectionService.queryDisconnectFromNode();
-        dispatch("clearConnectedNode");
-        commit(ConnectionMutationTypes.SET_CONNECTION_STATE, false);
-      } finally {
-        commit(ConnectionMutationTypes.SET_CONNECTION_LOADING_STATE, false);
-      }
+      await connectionService.queryDisconnectFromNode();
+      await dispatch("clearConnectedNode");
+    },
+
+    async setConnectionState({ commit }, payload: boolean): Promise<void> {
+      commit(ConnectionMutationTypes.SET_CONNECTION_STATE, payload);
     },
 
     async stopSessions({ commit }): Promise<void> {

@@ -36,12 +36,14 @@ import useWallet from "@/hooks/useWallet";
 import useAppSettings from "@/hooks/useAppSettings";
 import useAppRouter from "@/hooks/useAppRouter";
 import useNodes from "@/hooks/useNodes";
+import useConnection from "@/hooks/useConnection";
 
 const { isDnsConfigurationsLoading, loadDnsConfigurations } = useDns();
 const { get } = useWallet();
 const { openSetupGreetingView, openConnectionView } = useAppRouter();
 const { isAuthorized, isAppSetupInProgress, setupApp } = useAppSettings();
 const { isDefaultNodeLoading, selectDefaultNode, loadContinents } = useNodes();
+const { setConnectionState } = useConnection();
 
 const isAppLoading = computed<boolean>(
   () =>
@@ -69,7 +71,22 @@ const loadData = () => {
         .forEach((result) =>
           setError(JSON.stringify((result as PromiseRejectedResult).reason))
         );
-      wsProvider.openConnection();
+      wsProvider.openConnection(
+        (event: MessageEvent) => {
+          const data = JSON.parse(event.data);
+          switch (data.type) {
+            case "tunnelStatus":
+              setConnectionState(data.value === "connected");
+              break;
+            default:
+              setError(`Unsupported message type: ${data.type}.`);
+              break;
+          }
+        },
+        (event: Event) => {
+          setError(`Socket connection error: ${JSON.stringify(event)}.`);
+        }
+      );
     })
     .catch((e) => setError(JSON.stringify(e)));
 };
