@@ -76,7 +76,7 @@ export default function useConnection(): {
   };
 
   const connect = async (node: Node): Promise<void> => {
-    return await handleNodeSelection(node, true);
+    await handleNodeSelection(node, true);
   };
 
   const disconnect = async (): Promise<void> => {

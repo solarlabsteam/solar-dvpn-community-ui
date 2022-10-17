@@ -88,6 +88,9 @@ const loadData = () => {
             case "tunnelStatus":
               setConnectionState(data.value === "connected");
               break;
+            case "error":
+              setError(JSON.stringify(data.value));
+              break;
             default:
               setError(`Unsupported message type: ${data.type}.`);
               break;
