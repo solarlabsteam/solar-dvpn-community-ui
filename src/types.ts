@@ -150,3 +150,20 @@ export interface RegistryValue {
   value: string;
   isSecure: boolean;
 }
+
+export interface Product {
+  storeProduct: {
+    price: number;
+    currency: string;
+  };
+  offeringIdentifier: string;
+  localizedPriceString: string;
+  packageType: number;
+  identifier: string;
+}
+
+export interface Offering {
+  serverDescription: string;
+  availablePackages: Product[];
+  identifier: string;
+}

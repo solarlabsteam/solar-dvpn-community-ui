@@ -42,10 +42,11 @@
         </template>
         <template #buttons>
           <slr-button
+            class="text-uppercase"
             :large="true"
             :block="true"
             :variant="'primary'"
-            class="text-uppercase"
+            @click="openPurchaseModal"
           >
             {{ t("account.buyTokens") }}
           </slr-button>
@@ -53,9 +54,9 @@
       </settings-section>
     </div>
     <settings-section
+      class="mt-5"
       :title="t('account.logout.title')"
       :subtitle="t('account.logout.text')"
-      class="mt-5"
     >
       <template #buttons>
         <logout-btn />
@@ -74,9 +75,11 @@ import SettingsSection from "@/components/app/SettingsSection";
 import SlrButton from "@/components/ui/SlrButton/SlrButton.vue";
 import { network } from "@/constants";
 import useWallet from "@/hooks/useWallet";
+import useAppDialogs from "@/hooks/useAppDialogs";
 
 const { t } = useI18n();
 const { wallet, get } = useWallet();
+const { openPurchaseModal } = useAppDialogs();
 
 const balance = computed<string>(
   () => `${wallet.value.balance / 1e6} ${network}`

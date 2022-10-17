@@ -9,6 +9,10 @@
     <router-view />
 
     <transition name="modal">
+      <purchase-modal />
+    </transition>
+
+    <transition name="modal">
       <subscription-modal />
     </transition>
 
@@ -42,6 +46,7 @@ import useAppRouter from "@/hooks/useAppRouter";
 import useNodes from "@/hooks/useNodes";
 import useConnection from "@/hooks/useConnection";
 import UnsubscriptionModal from "@/components/app/UnsubscriptionModal";
+import PurchaseModal from "@/components/app/PurchaseModal";
 
 const { isDnsConfigurationsLoading, loadDnsConfigurations } = useDns();
 const { get } = useWallet();
