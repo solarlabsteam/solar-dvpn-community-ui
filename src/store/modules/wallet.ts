@@ -1,6 +1,6 @@
 import type { Module } from "vuex";
 import { AccountMutationTypes } from "@/store/mutation-types";
-import type { Wallet, WalletProfile } from "@/types";
+import type { Wallet } from "@/types";
 import walletService from "@/services/WalletService";
 
 interface AccountState {
@@ -25,21 +25,22 @@ export default {
   },
 
   actions: {
-    async getWallet({ commit }): Promise<Wallet> {
+    async getWallet({ commit }): Promise<void> {
       commit(AccountMutationTypes.SET_WALLET_LOADING_STATE, true);
       try {
         const wallet = await walletService.getWallet();
         commit(AccountMutationTypes.SET_WALLET, wallet);
-        return wallet;
       } finally {
         commit(AccountMutationTypes.SET_WALLET_LOADING_STATE, false);
       }
     },
 
-    async createWallet({ commit }): Promise<WalletProfile> {
+    async createWallet({ commit }): Promise<string> {
       commit(AccountMutationTypes.SET_WALLET_LOADING_STATE, true);
       try {
-        return await walletService.createWallet();
+        const wallet = await walletService.createWallet();
+        commit(AccountMutationTypes.SET_WALLET, wallet);
+        return wallet.mnemonic;
       } finally {
         commit(AccountMutationTypes.SET_WALLET_LOADING_STATE, false);
       }
@@ -55,29 +56,18 @@ export default {
       }
     },
 
-    async deleteWallet({ commit, dispatch }): Promise<void> {
-      commit(AccountMutationTypes.SET_LOG_OUT_LOADING_STATE, true);
+    async deleteWallet({ commit }): Promise<void> {
+      commit(AccountMutationTypes.SET_WALLET_LOADING_STATE, true);
 
       try {
         await walletService.deleteWallet();
-        await dispatch("resetStates");
       } finally {
-        commit(AccountMutationTypes.SET_LOG_OUT_LOADING_STATE, false);
+        commit(AccountMutationTypes.SET_WALLET_LOADING_STATE, false);
       }
     },
 
     async resetWalletState({ commit }) {
       commit(AccountMutationTypes.RESET_WALLET_STATE);
-    },
-
-    async resetStates({ dispatch }): Promise<void> {
-      await Promise.allSettled([
-        dispatch("resetNodeState"),
-        dispatch("resetQuotaState"),
-        dispatch("resetSubscriptionState"),
-        dispatch("resetSettingsState"),
-        dispatch("resetWalletState"),
-      ]);
     },
   },
 
@@ -87,13 +77,6 @@ export default {
       value: Wallet
     ): void {
       state.wallet = value;
-    },
-
-    [AccountMutationTypes.SET_LOG_OUT_LOADING_STATE](
-      state: AccountState,
-      value: boolean
-    ): void {
-      state.isLogoutLoading = value;
     },
 
     [AccountMutationTypes.SET_WALLET_LOADING_STATE](

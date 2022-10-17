@@ -27,7 +27,7 @@
       v-else
       class="nodes-search__list"
       :nodes="filteredNodes"
-      :select="selectNode"
+      :select="select"
       :load-more="loadMore"
     />
   </div>
@@ -37,11 +37,11 @@
 import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
 import { computed, ref, watch } from "vue";
-import useNodeActions from "@/hooks/useNodeActions";
 import type { ContinentCode, Node, NodesSearchParameters } from "@/types";
 import SlrLinearLoader from "@/components/ui/SlrLinearLoader";
 import NodesList from "@/components/app/NodesList";
 import NoData from "@/components/app/NoData";
+import useConnection from "@/hooks/useConnection";
 
 defineProps<{
   continentCode?: ContinentCode;
@@ -50,7 +50,7 @@ defineProps<{
 
 const store = useStore();
 const { t } = useI18n();
-const { selectNode } = useNodeActions();
+const { select } = useConnection();
 
 const searchString = ref("");
 const displayedContinent = ref<ContinentCode>();
@@ -66,8 +66,8 @@ const isLoadingFailed = computed<boolean>(
 const loadMore = () => {
   if (store.getters.isMoreNodesAvailable && !store.getters.isNodesLoading) {
     store.dispatch("fetchMoreNodes", {
-      countryCode: displayedCountry.value,
-      continentCode: displayedContinent.value,
+      country: displayedCountry.value,
+      continent: displayedContinent.value,
       query: searchString.value,
     });
   }
@@ -82,10 +82,20 @@ watch(
   (countryCode) => countryCode && fetchNodes({ country: countryCode })
 );
 
-watch(searchString, (query) => {
-  store.dispatch("setFilters", {
+watch(searchString, async (query) => {
+  await store.dispatch("setFilters", {
     ...store.getters.filters,
     query,
+  });
+  const { countryCode, continentCode, orderBy, minPrice, maxPrice } =
+    store.getters.filters;
+  await store.dispatch("fetchNodes", {
+    query,
+    country: countryCode,
+    continent: continentCode,
+    minPrice: Number(minPrice) * 1e6,
+    maxPrice: Number(maxPrice) * 1e6,
+    orderBy,
   });
 });
 </script>

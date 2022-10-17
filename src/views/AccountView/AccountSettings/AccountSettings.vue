@@ -25,10 +25,7 @@
           </div>
         </template>
       </settings-section>
-      <settings-section
-        :title="t('account.balance')"
-        :subtitle="t('account.balanceUpdated', { time: '0 minutes' })"
-      >
+      <settings-section :title="t('account.balance')">
         <template #content>
           <div class="account-settings__balance">
             {{ balance }}
@@ -36,16 +33,17 @@
               class="slr-clickable"
               :icon="'refresh'"
               :size="22"
-              @click="refreshBalance"
+              @click="get"
             />
           </div>
         </template>
         <template #buttons>
           <slr-button
+            class="text-uppercase"
             :large="true"
             :block="true"
             :variant="'primary'"
-            class="text-uppercase"
+            @click="openPurchaseModal"
           >
             {{ t("account.buyTokens") }}
           </slr-button>
@@ -53,9 +51,9 @@
       </settings-section>
     </div>
     <settings-section
+      class="mt-5"
       :title="t('account.logout.title')"
       :subtitle="t('account.logout.text')"
-      class="mt-5"
     >
       <template #buttons>
         <logout-btn />
@@ -66,7 +64,6 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
 import QrCode from "@/components/app/QrCode";
 import SlrClipboardText from "@/components/ui/SlrClipboardText";
@@ -75,23 +72,19 @@ import SettingsSection from "@/components/app/SettingsSection";
 import SlrButton from "@/components/ui/SlrButton/SlrButton.vue";
 import { network } from "@/constants";
 import useWallet from "@/hooks/useWallet";
+import useAppDialogs from "@/hooks/useAppDialogs";
 
 const { t } = useI18n();
-const store = useStore();
-const { get } = useWallet();
+const { wallet, get } = useWallet();
+const { openPurchaseModal } = useAppDialogs();
 
 const balance = computed<string>(
-  () => `${store.getters.wallet.balance / 1e6} ${network}`
+  () => `${wallet.value.balance / 1e6} ${network}`
 );
-const address = computed<string>(() => store.getters.wallet.address);
-
+const address = computed<string>(() => wallet.value.address);
 const croppedAddress = computed<string>(
   () => `${address.value.slice(0, 9)}...${address.value.slice(-10)}`
 );
-
-const refreshBalance = async () => {
-  await get();
-};
 </script>
 
 <style lang="scss" scoped>

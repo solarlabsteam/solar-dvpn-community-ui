@@ -16,7 +16,7 @@ class RegistryApi {
     value: string,
     isSecured: boolean
   ): Promise<void> {
-    await apiProvider.post(this.apiPath, { key, value, is_secured: isSecured });
+    await apiProvider.post(this.apiPath, { key, value, is_secure: isSecured });
   }
 
   async deleteValue(key: string): Promise<void> {

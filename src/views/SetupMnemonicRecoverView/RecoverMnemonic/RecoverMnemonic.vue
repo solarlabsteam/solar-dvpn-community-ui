@@ -4,9 +4,10 @@
       <div class="recover-mnemonic__field" v-for="n in wordsNumber" :key="n">
         <div class="recover-mnemonic__field-pretend">{{ n }}</div>
         <slr-input
+          type="text"
           :wrapper-class-name="'recover-mnemonic__field-input'"
           :model-value="words[n - 1]"
-          @paste="devPaste"
+          @paste="paste"
           @update:model-value="(str) => onWordsUpdate(str, n - 1)"
         />
       </div>
@@ -31,9 +32,7 @@ const onWordsUpdate = (value: string, index: number) => {
   debounce(emit("update:model-value", value, index));
 };
 
-const devPaste = (e: ClipboardEvent) => {
-  // if (process.env.NODE_ENV !== "development") return;
-
+const paste = (e: ClipboardEvent) => {
   e.preventDefault();
 
   const text = (e.clipboardData?.getData("text") as string) || "";

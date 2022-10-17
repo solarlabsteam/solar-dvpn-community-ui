@@ -1,19 +1,20 @@
-import useError from "@/hooks/useError";
-
-const { setError } = useError();
+import { createWebsocketConnection } from "@/utils/websocket";
 
 class WebsocketProvider {
   private readonly url = "ws://localhost:3876/echo";
   private ws: WebSocket | null = null;
 
-  openConnection(): WebSocket {
+  openConnection(
+    messageHandler: (event: MessageEvent) => void,
+    errorHandler: (event: Event) => void
+  ): WebSocket {
     if (!this.ws) {
-      this.ws = this.createWebsocketConnection(
+      this.ws = createWebsocketConnection(
         this.url,
-        this.onOpen,
-        this.onMessage,
-        this.onError,
-        this.onClose
+        undefined,
+        messageHandler,
+        errorHandler,
+        undefined
       );
     }
     return this.ws;
@@ -24,37 +25,6 @@ class WebsocketProvider {
       this.ws.close();
       this.ws = null;
     }
-  }
-
-  private createWebsocketConnection(
-    url: string,
-    onOpen?: (ev: Event) => any,
-    onMessage?: (ev: Event) => any,
-    onError?: (ev: Event) => any,
-    onClose?: (ev: Event) => any
-  ): WebSocket {
-    const ws = new WebSocket(url);
-    ws.onopen = onOpen || null;
-    ws.onmessage = onMessage || null;
-    ws.onerror = onError || null;
-    ws.onclose = onClose || null;
-    return ws;
-  }
-
-  private onOpen(event: any): void {
-    setError(`WEBSOCKET OPENED ${JSON.stringify(event)}`);
-  }
-
-  private onMessage(event: any): void {
-    setError(`WEBSOCKET MSG ${JSON.stringify(event)}`);
-  }
-
-  private onError(event: any): void {
-    setError(`WEBSOCKET ERROR ${JSON.stringify(event)}`);
-  }
-
-  private onClose(event: any): void {
-    setError(`WEBSOCKET CLOSE ${JSON.stringify(event)}`);
   }
 }
 

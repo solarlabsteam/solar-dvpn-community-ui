@@ -9,7 +9,6 @@ export default {
       text: "Be careful, destructive stuff!",
     },
     balance: "Your balance",
-    balanceUpdated: "Updated {time} ago",
     buyTokens: "Buy DVPN tokens",
   },
 
@@ -137,6 +136,7 @@ export default {
     back: "Back",
     done: "Done",
     subscribe: "Subscribe",
+    unsubscribe: "Unsubscribe",
     continue: "Continue",
     filter: "Filter",
     cancel: "Cancel",
@@ -153,6 +153,11 @@ export default {
     priceMessage: "will be paid upfront to node provider",
   },
 
+  unsubscriptionModal: {
+    header: "Unsubscribe",
+    message: "Are you sure to unsubscribe from {name}?",
+  },
+
   nodesFiltersModal: {
     header: "Filter By",
     body: {
@@ -163,5 +168,18 @@ export default {
       orderBy: "Order by",
     },
     applyFilters: "Apply filters",
+  },
+
+  purchaseModal: {
+    header: "Buy dVPN tokens",
+    body: {
+      header: "Buy tokens and trade them for GB!",
+      noData: "No products are available",
+      payment:
+        "The payment of {price} will be charged to your iTunes account at confirmation of purchase. Tokens will be credited to your account within few minutes after purchase.",
+    },
+    footer: {
+      buyNow: "Buy now",
+    },
   },
 };

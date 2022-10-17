@@ -1,10 +1,11 @@
 <template>
   <slr-button
     :block="true"
-    :loading="isLogoutLoading"
+    :loading="isLogoutInProgress || isWalletLoading"
+    :disabled="isLogoutInProgress || isWalletLoading"
     :large="true"
     :variant="'danger'"
-    @click="logout"
+    @click="logoutWallet"
   >
     <template #default="{ loading }">
       <slr-loader v-if="loading" :size="16" />
@@ -14,12 +15,20 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
-import { useStore } from "vuex";
+import useAppRouter from "@/hooks/useAppRouter";
+import useError from "@/hooks/useError";
+import useAppSettings from "@/hooks/useAppSettings";
 import useWallet from "@/hooks/useWallet";
 
-const store = useStore();
-const { logout } = useWallet();
+const { openSetupGreetingView } = useAppRouter();
+const { isWalletLoading, remove } = useWallet();
+const { isLogoutInProgress, logout } = useAppSettings();
+const { setError } = useError();
 
-const isLogoutLoading = computed<boolean>(() => store.getters.isLogoutLoading);
+const logoutWallet = () => {
+  remove()
+    .then(logout)
+    .then(openSetupGreetingView)
+    .catch((e) => setError(JSON.stringify(e)));
+};
 </script>

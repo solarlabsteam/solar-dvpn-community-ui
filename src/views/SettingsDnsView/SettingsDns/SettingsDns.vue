@@ -10,24 +10,15 @@
 </template>
 
 <script setup lang="ts">
-import { useStore } from "vuex";
-import { computed } from "vue";
-import type { DnsInfo } from "@/types";
 import DnsInfoList from "@/components/app/DnsInfoList/DnsInfoList.vue";
+import useDns from "@/hooks/useDns";
 
-const store = useStore();
-
-const dnsConfigurations = computed<DnsInfo[]>(
-  () => store.getters.dnsConfigurations
-);
-const selectedDns = computed<DnsInfo>(() => store.getters.selectedDns);
-const isDnsConfigurationsLoading = computed<boolean>(
-  () => store.getters.dnsConfigurationsLoadingState
-);
-
-const selectDns = (info: DnsInfo): void => {
-  store.dispatch("selectDns", info);
-};
+const {
+  selectedDns,
+  dnsConfigurations,
+  isDnsConfigurationsLoading,
+  selectDns,
+} = useDns();
 </script>
 
 <style lang="scss" scoped>

@@ -126,9 +126,4 @@ const router = createRouter({
   routes,
 });
 
-// router.beforeEach(async (to, from, next) => {
-//   if (!to.path.startsWith("/setup")) next({ name: "setup" });
-//   else next();
-// });
-
 export default router;

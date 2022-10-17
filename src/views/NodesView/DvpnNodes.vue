@@ -15,28 +15,23 @@
 </template>
 
 <script setup lang="ts">
-import { useStore } from "vuex";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
-import { useRouter } from "vue-router";
+import ContinentsList from "@/components/app/ContinentsList";
 import SubscribedNodes from "@/views/NodesView/tabs/SubscribedNodes.vue";
-import ContinentsList from "@/components/app/ContinentsList/ContinentsList.vue";
-import type { ContinentsInfo, Node, ContinentCode } from "@/types";
+import type { ContinentCode } from "@/types";
+import useAppRouter from "@/hooks/useAppRouter";
+import useNodes from "@/hooks/useNodes";
 
-const store = useStore();
 const { t } = useI18n();
-const router = useRouter();
-const subscribedNodesList = computed<Node[]>(
-  () => store.getters.subscribedNodes
-);
-const defaultActiveTab = computed<number>(() =>
-  subscribedNodesList.value.length > 0 ? 0 : 1
-);
-const continents = computed<ContinentsInfo>(() => store.getters.continents);
+const { openNodesAvailableView } = useAppRouter();
+const { subscribedNodes, continents } = useNodes();
 
-const openContinent = (code: ContinentCode) => {
-  router.push({ name: "nodes-available", query: { continentCode: code } });
-};
+const defaultActiveTab = computed<number>(() =>
+  subscribedNodes.value.length > 0 ? 0 : 1
+);
+
+const openContinent = (code: ContinentCode) => openNodesAvailableView(code);
 </script>
 
 <style lang="scss" scoped>

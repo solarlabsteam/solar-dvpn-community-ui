@@ -31,12 +31,11 @@
 import NodesSearch from "@/views/NodesSearchView/NodesSearch";
 import { useI18n } from "vue-i18n";
 import { ContinentCode, type NodesFilters } from "@/types";
-import { useRouter } from "vue-router";
 import { computed, onMounted, ref, watch } from "vue";
 import lookupCountry from "country-code-lookup";
-import useGlobalEmitter from "@/hooks/useGlobalEmitter";
 import { useStore } from "vuex";
 import useAppDialogs from "@/hooks/useAppDialogs";
+import useAppRouter from "@/hooks/useAppRouter";
 
 const props = defineProps<{
   continentCode?: ContinentCode;
@@ -44,7 +43,7 @@ const props = defineProps<{
 }>();
 
 const { t } = useI18n();
-const router = useRouter();
+const { openNodesView, openNodesAvailableView } = useAppRouter();
 const store = useStore();
 const { openNodesFiltersModal } = useAppDialogs();
 
@@ -77,15 +76,9 @@ onMounted(async () => {
 const back = () => {
   store.dispatch("clearFilters");
   if (!props.continentCode && !props.countryCode) {
-    router.push({ name: "nodes" });
+    openNodesView();
   } else {
-    router.push({
-      name: "nodes-available",
-      query: {
-        continentCode: props.continentCode,
-        countryCode: props.countryCode,
-      },
-    });
+    openNodesAvailableView(props.continentCode, props.countryCode);
   }
 };
 

@@ -29,38 +29,46 @@
 
 <script setup lang="ts">
 import SlrView from "@/components/ui/SlrView/SlrView.vue";
-import { useRouter } from "vue-router";
 import RecoverMnemonic from "@/views/SetupMnemonicRecoverView/RecoverMnemonic/RecoverMnemonic.vue";
 import SlrButton from "@/components/ui/SlrButton/SlrButton.vue";
 import { useI18n } from "vue-i18n";
 import { computed, ref } from "vue";
 import useWallet from "@/hooks/useWallet";
 import useError from "@/hooks/useError";
+import useAppRouter from "@/hooks/useAppRouter";
+import useAppSettings from "@/hooks/useAppSettings";
 
-const router = useRouter();
 const { t } = useI18n();
-const { recover } = useWallet();
+const { login } = useAppSettings();
+const { openSetupCompleteView, openSetupActionsView } = useAppRouter();
+const { isWalletLoading, recover } = useWallet();
 const { setError } = useError();
 
 const words = ref<string[]>([]);
 
 const continueDisabled = computed<boolean>(
-  () => words.value.length < 24 || words.value.some((word) => !word)
+  () =>
+    words.value.length < 24 ||
+    words.value.some((word) => !word) ||
+    isWalletLoading.value
 );
 
 const back = () => {
-  router.push({ name: "mnemonic-setup" });
+  openSetupActionsView();
 };
 
 const onWordsUpdate = (value: string, index: number) => {
-  words.value[index] = value;
+  const newWords = [...words.value];
+  newWords[index] = value;
+  words.value = newWords;
 };
 
 const done = () => {
   const mnemonic = words.value.map((i) => i.trim()).join(" ");
   recover(mnemonic)
-    .then(() => router.push({ name: "setup-complete" }))
-    .catch((e) => setError(e.message));
+    .then(login)
+    .then(openSetupCompleteView)
+    .catch((e) => setError(JSON.stringify(e)));
 };
 </script>
 

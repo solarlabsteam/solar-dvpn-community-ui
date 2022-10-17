@@ -1,7 +1,6 @@
 .subscribed-nodes-list {
   overflow-x: auto;
-  height: calc(100vh - 115px);
-  max-height: 810px;
+  height: 100%;
 
   &__item {
     display: flex;

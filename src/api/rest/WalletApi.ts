@@ -1,17 +1,7 @@
 import type { Wallet, WalletProfile } from "@/types";
 import { apiProvider } from "@/api";
 
-interface IWalletApi {
-  getWallet(): Promise<Wallet>;
-
-  createWallet(): Promise<WalletProfile>;
-
-  recoverWallet(mnemonic: string): Promise<Wallet>;
-
-  deleteWallet(): Promise<void>;
-}
-
-class WalletApi implements IWalletApi {
+class WalletApi {
   private readonly apiPath = "wallet";
 
   async getWallet(): Promise<Wallet> {
@@ -31,41 +21,6 @@ class WalletApi implements IWalletApi {
   }
 }
 
-class WalletApiMock implements IWalletApi {
-  async getWallet(): Promise<Wallet> {
-    return {
-      address: "sent1gyu0dkhk4y7wfsj4zr2lkxettvvpkadek6dn7q",
-      balance: 200_000_000,
-      currency: "udvpn",
-    };
-  }
-
-  async createWallet(): Promise<WalletProfile> {
-    return {
-      mnemonic:
-        "change engine tiny holiday shiver topple proud yellow large alpha expire network drop renew poverty print empty scale knock post elevator sister river burst",
-      wallet: {
-        address: "sent1gyu0dkhk4y7wfsj4zr2lkxettvvpkadek6dn7q",
-        balance: 200_000_000,
-        currency: "udvpn",
-      },
-    };
-  }
-
-  async recoverWallet(): Promise<Wallet> {
-    return {
-      address: "sent1gyu0dkhk4y7wfsj4zr2lkxettvvpkadek6dn7q",
-      balance: 200_000_000,
-      currency: "udvpn",
-    };
-  }
-
-  async deleteWallet(): Promise<void> {}
-}
-
-const walletApi: IWalletApi =
-  process.env.NODE_ENV === "development"
-    ? new WalletApiMock()
-    : new WalletApi();
+const walletApi = new WalletApi();
 
 export default walletApi;

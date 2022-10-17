@@ -16,16 +16,14 @@
 
 <script setup lang="ts">
 import SlrView from "@/components/ui/SlrView";
-import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import SettingsDns from "@/views/SettingsDnsView/SettingsDns/SettingsDns.vue";
-import { useStore } from "vuex";
+import useAppRouter from "@/hooks/useAppRouter";
 
-const store = useStore();
-const router = useRouter();
+const { openSettingsView } = useAppRouter();
 const { t } = useI18n();
 
 const back = () => {
-  router.push({ name: "settings" });
+  openSettingsView();
 };
 </script>

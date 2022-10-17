@@ -1,24 +1,36 @@
 import { useStore } from "vuex";
 import { computed, type ComputedRef } from "vue";
-import { type Node, NodeSelectionStatus } from "@/types";
-import { useRouter } from "vue-router";
+import { type Node, NodeSelectionStatus, NodeStatus } from "@/types";
 import useAppDialogs from "@/hooks/useAppDialogs";
+import useAppRouter from "@/hooks/useAppRouter";
 
 export default function useConnection(): {
+  isConnected: ComputedRef<boolean>;
+  isConnectionLoading: ComputedRef<boolean>;
+  isStopSessionsInProgress: ComputedRef<boolean>;
+  isResetConfigurationInProgress: ComputedRef<boolean>;
   select(node: Node): Promise<void>;
   connect(node: Node): Promise<void>;
   disconnect(): Promise<void>;
-  isConnected: ComputedRef<boolean>;
-  isConnectionLoading: ComputedRef<boolean>;
+  stopSessions(): Promise<void>;
+  resetConfiguration(): Promise<void>;
+  setConnectionState(value: boolean): Promise<void>;
+  checkNodeConnection(): Promise<void>;
 } {
   const store = useStore();
-  const router = useRouter();
-  const { openSubscriptionModal } = useAppDialogs();
+  const { openConnectionView } = useAppRouter();
+  const { openSubscriptionModal, openUnsubscriptionModal } = useAppDialogs();
 
   const isConnectionLoading = computed<boolean>(
     () => store.getters.isConnectionLoading
   );
   const isConnected = computed<boolean>(() => store.getters.isConnected);
+  const isStopSessionsInProgress = computed<boolean>(
+    () => store.getters.isStopSessionsInProgress
+  );
+  const isResetConfigurationInProgress = computed<boolean>(
+    () => store.getters.isResetConfigurationInProgress
+  );
 
   const handleNodeSelection = async (
     node: Node,
@@ -42,7 +54,7 @@ export default function useConnection(): {
         openSubscriptionModal(node);
         return;
       case NodeSelectionStatus.SUCCESS:
-        await router.push({ name: "home" });
+        openConnectionView();
         if (connect) {
           await store.dispatch("connectToNode");
         }
@@ -51,16 +63,49 @@ export default function useConnection(): {
   };
 
   const select = async (node: Node): Promise<void> => {
-    return await handleNodeSelection(node, false);
+    if (node.status === NodeStatus.active) {
+      await handleNodeSelection(node, false);
+    } else {
+      openUnsubscriptionModal(node);
+    }
+  };
+
+  const setConnectionState = async (value: boolean): Promise<void> => {
+    await store.dispatch("setConnectionState", value);
+    await store.dispatch("setConnectionLoadingState", false);
   };
 
   const connect = async (node: Node): Promise<void> => {
-    return await handleNodeSelection(node, true);
+    await handleNodeSelection(node, true);
   };
 
   const disconnect = async (): Promise<void> => {
     await store.dispatch("disconnectFromNode");
   };
 
-  return { select, connect, disconnect, isConnectionLoading, isConnected };
+  const stopSessions = async (): Promise<void> => {
+    await store.dispatch("stopSessions");
+  };
+
+  const resetConfiguration = async (): Promise<void> => {
+    await store.dispatch("resetConfiguration");
+  };
+
+  const checkNodeConnection = async (): Promise<void> => {
+    await store.dispatch("checkNodeConnection");
+  };
+
+  return {
+    isConnectionLoading,
+    isConnected,
+    isStopSessionsInProgress,
+    isResetConfigurationInProgress,
+    select,
+    connect,
+    disconnect,
+    stopSessions,
+    resetConfiguration,
+    setConnectionState,
+    checkNodeConnection,
+  };
 }

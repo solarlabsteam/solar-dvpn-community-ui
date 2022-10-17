@@ -7,6 +7,8 @@ import nodes from "@/store/modules/nodes";
 import nodesFilters from "@/store/modules/nodesFilters";
 import wallet from "@/store/modules/wallet";
 import settings from "@/store/modules/settings";
+import app from "@/store/modules/app";
+import purchase from "@/store/modules/purchase";
 
 const logger =
   process.env.NODE_ENV === "development" ? createLogger() : function () {};
@@ -21,6 +23,8 @@ export default createStore({
     nodesFilters,
     wallet,
     settings,
+    app,
+    purchase,
   },
   plugins: [logger],
 });

@@ -1,16 +1,7 @@
 import type { DnsInfo } from "@/types";
-import { cloudflare, google, handshake } from "@/constants/dns";
 import { apiProvider } from "@/api";
 
-interface IDnsApi {
-  getDnsConfigurations(): Promise<DnsInfo[]>;
-
-  getSelectedDnsConfiguration(): Promise<DnsInfo>;
-
-  selectDnsConfiguration(dns: string): Promise<void>;
-}
-
-class DnsApi implements IDnsApi {
+class DnsApi {
   private readonly apiPath = "dns";
 
   getDnsConfigurations(): Promise<DnsInfo[]> {
@@ -28,19 +19,6 @@ class DnsApi implements IDnsApi {
   }
 }
 
-class DnsApiMock implements IDnsApi {
-  getDnsConfigurations(): Promise<DnsInfo[]> {
-    return Promise.resolve([handshake, google, cloudflare]);
-  }
-
-  getSelectedDnsConfiguration(): Promise<DnsInfo> {
-    return Promise.resolve(handshake);
-  }
-
-  async selectDnsConfiguration(dns: string): Promise<void> {}
-}
-
-const dnsApi =
-  process.env.NODE_ENV === "development" ? new DnsApiMock() : new DnsApi();
+const dnsApi = new DnsApi();
 
 export default dnsApi;

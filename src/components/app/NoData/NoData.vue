@@ -18,7 +18,7 @@
 <script setup lang="ts">
 defineProps<{
   title: string;
-  text: string;
+  text?: string;
   actionText?: string;
   action?(): void;
 }>();

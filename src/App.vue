@@ -9,7 +9,15 @@
     <router-view />
 
     <transition name="modal">
+      <purchase-modal />
+    </transition>
+
+    <transition name="modal">
       <subscription-modal />
+    </transition>
+
+    <transition name="modal">
+      <unsubscription-modal />
     </transition>
 
     <transition name="modal">
@@ -24,32 +32,33 @@ import {
   onBeforeMount,
   onBeforeUnmount,
   onErrorCaptured,
+  onMounted,
   watch,
 } from "vue";
-import { useStore } from "vuex";
 import LoadingOverlay from "@/components/app/LoadingOverlay";
 import SubscriptionModal from "@/components/app/SubscriptionModal";
 import NodesFiltersModal from "@/components/app/NodesFiltersModal";
 import useError from "@/hooks/useError";
 import { wsProvider } from "@/api";
+import useDns from "@/hooks/useDns";
+import useWallet from "@/hooks/useWallet";
+import useAppSettings from "@/hooks/useAppSettings";
+import useAppRouter from "@/hooks/useAppRouter";
+import useNodes from "@/hooks/useNodes";
+import useConnection from "@/hooks/useConnection";
+import UnsubscriptionModal from "@/components/app/UnsubscriptionModal";
+import PurchaseModal from "@/components/app/PurchaseModal";
 
-const store = useStore();
-const selectedNode = computed<Node>(() => store.getters.selectedNode);
-const isDnsConfigurationsLoading = computed<boolean>(
-  () => store.getters.dnsConfigurationsLoadingState
-);
-const isDefaultNodeLoading = computed<boolean>(
-  () => store.getters.isDefaultNodeLoading
-);
-const isLogoutInProcess = computed<boolean>(
-  () => store.getters.isLogoutLoading
-);
-// const isWalletLoading = computed<boolean>(
-//   () => store.getters.isWalletLoading
-// );
+const { isDnsConfigurationsLoading, loadDnsConfigurations } = useDns();
+const { get } = useWallet();
+const { openSetupGreetingView, openConnectionView } = useAppRouter();
+const { isAuthorized, isAppSetupInProgress, setupApp } = useAppSettings();
+const { isDefaultNodeLoading, loadNodes, loadContinents } = useNodes();
+const { checkNodeConnection, setConnectionState } = useConnection();
+
 const isAppLoading = computed<boolean>(
   () =>
-    isLogoutInProcess.value ||
+    isAppSetupInProgress.value ||
     isDefaultNodeLoading.value ||
     isDnsConfigurationsLoading.value
 );
@@ -60,48 +69,82 @@ const resetError = () => {
   setError(undefined);
 };
 
+const loadData = () => {
+  Promise.allSettled([
+    get(),
+    loadNodes(),
+    loadContinents(),
+    loadDnsConfigurations(),
+  ])
+    .then((results) => {
+      results
+        .filter((result) => result.status === "rejected")
+        .forEach((result) =>
+          setError(JSON.stringify((result as PromiseRejectedResult).reason))
+        );
+      wsProvider.openConnection(
+        (event: MessageEvent) => {
+          const data = JSON.parse(event.data);
+          switch (data.type) {
+            case "tunnelStatus":
+              setConnectionState(data.value === "connected");
+              break;
+            case "error":
+              setError(JSON.stringify(data.value));
+              break;
+            default:
+              setError(`Unsupported message type: ${data.type}.`);
+              break;
+          }
+        },
+        (event: Event) => {
+          setError(`Socket connection error: ${JSON.stringify(event)}.`);
+        }
+      );
+    })
+    .catch((e) => setError(JSON.stringify(e)));
+};
+
+const onViewAppear = () => {
+  if (isAuthorized.value) {
+    checkNodeConnection();
+  }
+};
+
 onBeforeMount(() => {
-  store.dispatch("getWallet").catch((e) => {
-    setError(e.message);
-  });
-  store.dispatch("selectDefaultNode").catch((e) => {
-    setError(e.message);
-  });
-  store.dispatch("fetchNodes").catch((e) => {
-    setError(e.message);
-  });
-  store.dispatch("fetchDnsConfigurations").catch((e) => {
-    setError(e.message);
-  });
+  window.addEventListener("focus", onViewAppear);
+
+  setupApp()
+    .then(() => {
+      if (isAuthorized.value) {
+        openConnectionView();
+        loadData();
+      } else {
+        openSetupGreetingView();
+      }
+    })
+    .catch((e) => setError(JSON.stringify(e)));
+});
+
+onMounted(() => {
+  window.focus();
 });
 
 onBeforeUnmount(() => {
+  window.removeEventListener("focus", onViewAppear);
+
   wsProvider.closeConnection();
 });
 
-onErrorCaptured((e) => {
-  setError(`APP ${JSON.stringify(e)}`);
+onErrorCaptured((err) => {
+  if (err && (err.name || err.message)) {
+    setError(
+      (err.name ? err.name + " " : "") + (err.message ? err.message + " " : "")
+    );
+  }
 });
 
-watch(
-  () => store.getters.wallet,
-  (wallet) => {
-    if (!wallet) return;
-    if (!selectedNode.value) {
-      store.dispatch("selectDefaultNode").catch((e) => {
-        setError(e.message);
-      });
-    } else {
-      store.dispatch("fetchSubscribedNodes").catch((e) => {
-        setError(e.message);
-      });
-    }
-    store.dispatch("fetchContinents").catch((e) => {
-      setError(e.message);
-    });
-    wsProvider.openConnection();
-  }
-);
+watch(() => isAuthorized.value, loadData);
 </script>
 
 <style lang="scss">
@@ -121,7 +164,6 @@ body {
   height: 100%;
   overflow: hidden;
   margin: 0;
-  -webkit-app-region: drag;
 }
 
 #app {

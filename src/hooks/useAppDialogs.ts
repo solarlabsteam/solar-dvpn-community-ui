@@ -2,8 +2,9 @@ import useGlobalEmitter from "@/hooks/useGlobalEmitter";
 import type { Node } from "@/types";
 
 export default function useAppDialogs(): {
-  openTopUpModal(): void;
+  openPurchaseModal(): void;
   openSubscriptionModal(node: Node): void;
+  openUnsubscriptionModal(node: Node): void;
   openNodesFiltersModal(): void;
 } {
   const emitter = useGlobalEmitter();
@@ -12,13 +13,22 @@ export default function useAppDialogs(): {
     emitter.$emit("open-subscription-modal", node);
   };
 
-  const openTopUpModal = (): void => {
-    emitter.$emit("open-top-up-modal");
+  const openUnsubscriptionModal = (node: Node): void => {
+    emitter.$emit("open-unsubscription-modal", node);
+  };
+
+  const openPurchaseModal = (): void => {
+    emitter.$emit("open-purchase-modal");
   };
 
   const openNodesFiltersModal = () => {
     emitter.$emit("open-nodes-filters-modal");
   };
 
-  return { openTopUpModal, openSubscriptionModal, openNodesFiltersModal };
+  return {
+    openPurchaseModal,
+    openSubscriptionModal,
+    openUnsubscriptionModal,
+    openNodesFiltersModal,
+  };
 }

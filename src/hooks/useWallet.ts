@@ -1,49 +1,44 @@
 import { useStore } from "vuex";
-import { useRouter } from "vue-router";
-import type { Wallet, WalletProfile } from "@/types";
-import useError from "@/hooks/useError";
+import type { Wallet } from "@/types";
 import { computed, type ComputedRef } from "vue";
 
 export default function useWallet(): {
+  wallet: ComputedRef<Wallet>;
   isWalletLoading: ComputedRef<boolean>;
-  create(): Promise<WalletProfile | undefined>;
-  get(): Promise<WalletProfile>;
+  create(): Promise<string>;
+  get(): Promise<void>;
   recover(mnemonic: string): Promise<void>;
-  logout(): void;
+  remove(): Promise<void>;
 } {
   const store = useStore();
-  const router = useRouter();
-  const { setError } = useError();
 
+  const wallet = computed<Wallet>(() => store.getters.wallet);
   const isWalletLoading = computed<boolean>(
     () => store.getters.isWalletLoading
   );
 
-  const create = async (): Promise<WalletProfile | undefined> => {
-    try {
-      return await store.dispatch("createWallet");
-    } catch (e: any) {
-      setError(e.message);
-    }
+  const create = async (): Promise<string> => {
+    return await store.dispatch("createWallet");
   };
 
-  const get = async (): Promise<WalletProfile> => {
-    return await store.dispatch("getWallet");
+  const get = async (): Promise<void> => {
+    await store.dispatch("getWallet");
   };
 
   const recover = async (mnemonic: string): Promise<void> => {
     await store.dispatch("recoverWallet", mnemonic);
   };
 
-  const logout = (): void => {
-    store.dispatch("deleteWallet").then(() => router.push({ name: "setup" }));
+  const remove = async (): Promise<void> => {
+    await store.dispatch("deleteWallet");
   };
 
   return {
+    wallet,
     isWalletLoading,
     create,
     get,
     recover,
-    logout,
+    remove,
   };
 }

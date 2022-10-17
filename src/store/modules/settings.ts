@@ -1,5 +1,4 @@
 import type { Module } from "vuex";
-import { handshake } from "@/constants/dns";
 import { SettingsMutationTypes } from "@/store/mutation-types";
 import type { DnsInfo } from "@/types";
 import dnsService from "@/services/DnsService";
