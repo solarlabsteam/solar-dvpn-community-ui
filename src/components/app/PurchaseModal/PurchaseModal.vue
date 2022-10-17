@@ -6,9 +6,9 @@
     @close="close"
   >
     <template #header>
-      <span class="purchase-modal__header">{{
-        t("purchaseModal.header")
-      }}</span>
+      <span class="purchase-modal__header">
+        {{ t("purchaseModal.header") }}
+      </span>
     </template>
 
     <template #body>
@@ -33,41 +33,12 @@
                 type="radio"
                 :value="index"
               />
-              <div class="purchase-modal__product-dvpn">
+              <div class="purchase-modal__product-tokens">
                 {{ product.identifier.replace("dvpn_", "") }}&nbsp;DVPN&nbsp;
               </div>
             </div>
-            <div class="d-flex align-items-center">
-              <div
-                class="purchase-modal__product-save mr-5"
-                :class="{
-                  'purchase-modal__product-save--faded':
-                    (product.storeProduct.price /
-                      products[0].storeProduct.price) *
-                      100 ===
-                    0,
-                }"
-              >
-                {{
-                  t("purchaseModal.body.product.save", {
-                    percent:
-                      (product.storeProduct.price /
-                        products[0].storeProduct.price) *
-                      100,
-                  })
-                }}
-              </div>
-              <div class="purchase-modal__product-price">
-                <span class="purchase-modal__product-price-amount">
-                  {{ product.localizedPriceString }}
-                </span>
-              </div>
-            </div>
-            <div
-              v-if="index === products.length - 1"
-              class="purchase-modal__product-best"
-            >
-              {{ t("purchaseModal.body.product.best") }}
+            <div class="purchase-modal__product-price">
+              {{ product.localizedPriceString }}
             </div>
           </div>
         </div>
@@ -82,8 +53,15 @@
       <div class="purchase-modal__buttons">
         <slr-button
           class="text-uppercase"
+          :variant="'secondary'"
+          :block="true"
+          @click="close"
+        >
+          {{ t("action.cancel") }}
+        </slr-button>
+        <slr-button
+          class="text-uppercase"
           :variant="'primary'"
-          :large="true"
           :block="true"
           :loading="isPurchaseInProgress || isProductsLoading"
           :disabled="isPurchaseInProgress || isProductsLoading"
@@ -116,7 +94,9 @@ const {
 const isOpen = ref<boolean>(false);
 const selectedProduct = ref<number>(3);
 
-const selectedPrice = computed<number>(() => 0);
+const selectedPrice = computed<string>(
+  () => products.value[selectedProduct.value].localizedPriceString
+);
 
 const selectProduct = (productIndex: number) => {
   selectedProduct.value = productIndex;
