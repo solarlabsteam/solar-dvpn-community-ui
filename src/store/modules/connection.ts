@@ -1,6 +1,7 @@
 import type { Module } from "vuex";
 import { ConnectionMutationTypes } from "@/store/mutation-types";
 import connectionService from "@/services/ConnectionService";
+import nodeService from "@/services/NodeService";
 
 interface ConnectionState {
   isConnectionLoading: boolean;
@@ -73,6 +74,24 @@ export default {
           ConnectionMutationTypes.SET_RESET_CONFIGURATION_LOADING_STATE,
           false
         );
+      }
+    },
+
+    async checkNodeConnection({ commit, dispatch }): Promise<void> {
+      commit(ConnectionMutationTypes.SET_CONNECTION_LOADING_STATE, true);
+
+      try {
+        const connection = await connectionService.queryNodeConnection();
+        const isConnected = connection.tunnelStatus === "connected";
+        if (isConnected) {
+          const node = (
+            await nodeService.querySubscribedNodes([connection.nodeAddress])
+          ).items[0];
+          dispatch("selectNode", node);
+        }
+        commit(ConnectionMutationTypes.SET_CONNECTION_STATE, isConnected);
+      } finally {
+        commit(ConnectionMutationTypes.SET_CONNECTION_LOADING_STATE, false);
       }
     },
 

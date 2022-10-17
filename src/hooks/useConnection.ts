@@ -15,6 +15,7 @@ export default function useConnection(): {
   stopSessions(): Promise<void>;
   resetConfiguration(): Promise<void>;
   setConnectionState(value: boolean): Promise<void>;
+  checkNodeConnection(): Promise<void>;
 } {
   const store = useStore();
   const { openConnectionView } = useAppRouter();
@@ -90,6 +91,10 @@ export default function useConnection(): {
     await store.dispatch("resetConfiguration");
   };
 
+  const checkNodeConnection = async (): Promise<void> => {
+    await store.dispatch("checkNodeConnection");
+  };
+
   return {
     isConnectionLoading,
     isConnected,
@@ -101,5 +106,6 @@ export default function useConnection(): {
     stopSessions,
     resetConfiguration,
     setConnectionState,
+    checkNodeConnection,
   };
 }

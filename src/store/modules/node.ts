@@ -1,6 +1,8 @@
 import type { Module } from "vuex";
 import { NodeMutationTypes } from "@/store/mutation-types";
 import { type Node, NodeSelectionStatus, NodeStatus } from "@/types";
+import connectionService from "@/services/ConnectionService";
+import nodeService from "@/services/NodeService";
 
 interface NodeState {
   selectedNode?: Node;
@@ -79,18 +81,32 @@ export default {
           dispatch("fetchNodes", {}),
         ]);
 
-        const activeSubscribedNodes = getters.subscribedNodes.filter(
-          (node: Node) => node.status === NodeStatus.active
-        );
-        const defaultSubscribedNode =
-          activeSubscribedNodes.length > 0 ? activeSubscribedNodes[0] : null;
-        const defaultAvailableNode =
-          getters.nodes.length > 0
-            ? getters.nodes.find((node: Node) => node.isTrusted) ||
-              getters.nodes[0]
-            : null;
-        const node = defaultSubscribedNode || defaultAvailableNode;
-        await Promise.allSettled([dispatch("selectNode", node)]);
+        let node: Node;
+
+        const connection = await connectionService.queryNodeConnection();
+        const isConnected = connection.tunnelStatus === "connected";
+        if (isConnected) {
+          node = (
+            await nodeService.querySubscribedNodes([connection.nodeAddress])
+          ).items[0];
+        } else {
+          const activeSubscribedNodes = getters.subscribedNodes.filter(
+            (node: Node) => node.status === NodeStatus.active
+          );
+          const defaultSubscribedNode =
+            activeSubscribedNodes.length > 0 ? activeSubscribedNodes[0] : null;
+          const defaultAvailableNode =
+            getters.nodes.length > 0
+              ? getters.nodes.find((node: Node) => node.isTrusted) ||
+                getters.nodes[0]
+              : null;
+          node = defaultSubscribedNode || defaultAvailableNode;
+        }
+        await dispatch("selectNode", node);
+        await dispatch("setConnectionState", isConnected);
+        if (isConnected) {
+          await dispatch("setConnectedNode", node);
+        }
       } finally {
         commit(NodeMutationTypes.SET_DEFAULT_NODE_LOADING_STATE, false);
       }

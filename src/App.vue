@@ -31,7 +31,7 @@ import {
   computed,
   onBeforeMount,
   onBeforeUnmount,
-  onErrorCaptured,
+  onMounted,
   watch,
 } from "vue";
 import LoadingOverlay from "@/components/app/LoadingOverlay";
@@ -52,8 +52,8 @@ const { isDnsConfigurationsLoading, loadDnsConfigurations } = useDns();
 const { get } = useWallet();
 const { openSetupGreetingView, openConnectionView } = useAppRouter();
 const { isAuthorized, isAppSetupInProgress, setupApp } = useAppSettings();
-const { isDefaultNodeLoading, selectDefaultNode, loadContinents } = useNodes();
-const { setConnectionState } = useConnection();
+const { isDefaultNodeLoading, loadNodes, loadContinents } = useNodes();
+const { checkNodeConnection, setConnectionState } = useConnection();
 
 const isAppLoading = computed<boolean>(
   () =>
@@ -71,7 +71,7 @@ const resetError = () => {
 const loadData = () => {
   Promise.allSettled([
     get(),
-    selectDefaultNode(),
+    loadNodes(),
     loadContinents(),
     loadDnsConfigurations(),
   ])
@@ -101,7 +101,15 @@ const loadData = () => {
     .catch((e) => setError(JSON.stringify(e)));
 };
 
+const onViewAppear = () => {
+  if (isAuthorized.value) {
+    checkNodeConnection();
+  }
+};
+
 onBeforeMount(() => {
+  window.addEventListener("focus", onViewAppear);
+
   setupApp()
     .then(() => {
       if (isAuthorized.value) {
@@ -114,12 +122,14 @@ onBeforeMount(() => {
     .catch((e) => setError(JSON.stringify(e)));
 });
 
-onBeforeUnmount(() => {
-  wsProvider.closeConnection();
+onMounted(() => {
+  window.focus();
 });
 
-onErrorCaptured((e) => {
-  setError(`APP ${JSON.stringify(e)}`);
+onBeforeUnmount(() => {
+  window.removeEventListener("focus", onViewAppear);
+
+  wsProvider.closeConnection();
 });
 
 watch(() => isAuthorized.value, loadData);

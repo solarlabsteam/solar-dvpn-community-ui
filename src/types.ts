@@ -151,6 +151,11 @@ export interface RegistryValue {
   isSecure: boolean;
 }
 
+export interface NodeConnection {
+  nodeAddress: string;
+  tunnelStatus: string;
+}
+
 export interface Product {
   storeProduct: {
     price: number;
