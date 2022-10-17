@@ -34,16 +34,13 @@ const store = useStore();
 const { setError } = useError();
 
 const selectedNode = computed<Node>(() => store.getters.selectedNode);
-const displayedNode = computed<Node | undefined>(
-  () => store.getters.connectedNode || store.getters.selectedNode
-);
 const isConnected = computed<boolean>(() => store.getters.isConnected);
 const quotaData = computed<Quota>(() => store.getters.quota);
 const bandwidthDownload = computed<Bandwidth>(() =>
-  formatBandwidth(displayedNode.value?.bandwidthDownload || 0)
+  formatBandwidth(selectedNode.value?.bandwidthDownload || 0)
 );
 const bandwidthUpload = computed<Bandwidth>(() =>
-  formatBandwidth(displayedNode.value?.bandwidthUpload || 0)
+  formatBandwidth(selectedNode.value?.bandwidthUpload || 0)
 );
 const bandwidthLeft = computed<string>(() =>
   (

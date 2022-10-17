@@ -4,6 +4,7 @@ import { useStore } from "vuex";
 import { computed } from "vue";
 
 export default function useNodes(): {
+  selectedNode: ComputedRef<Node | undefined>;
   continents: ComputedRef<ContinentsInfo>;
   subscribedNodes: ComputedRef<Node[]>;
   isDefaultNodeLoading: ComputedRef<boolean>;
@@ -12,6 +13,9 @@ export default function useNodes(): {
 } {
   const store = useStore();
 
+  const selectedNode = computed<Node | undefined>(
+    () => store.getters.selectedNode
+  );
   const continents = computed<ContinentsInfo>(() => store.getters.continents);
   const subscribedNodes = computed<Node[]>(() => store.getters.subscribedNodes);
   const isDefaultNodeLoading = computed<boolean>(
@@ -27,6 +31,7 @@ export default function useNodes(): {
   };
 
   return {
+    selectedNode,
     continents,
     subscribedNodes,
     isDefaultNodeLoading,

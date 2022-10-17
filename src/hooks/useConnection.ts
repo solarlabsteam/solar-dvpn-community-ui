@@ -38,7 +38,7 @@ export default function useConnection(): {
   ): Promise<void> => {
     if (
       node.blockchainAddress ===
-        store.getters.connectedNode?.blockchainAddress ||
+        store.getters.selectedNode?.blockchainAddress ||
       isConnectionLoading.value
     ) {
       return;

@@ -6,13 +6,11 @@ import nodeService from "@/services/NodeService";
 
 interface NodeState {
   selectedNode?: Node;
-  connectedNode?: Node;
   isDefaultNodeLoading: boolean;
 }
 
 const getDefaultState = (): NodeState => ({
   selectedNode: undefined,
-  connectedNode: undefined,
   isDefaultNodeLoading: false,
 });
 
@@ -21,9 +19,6 @@ export default {
 
   getters: {
     selectedNode: (state): Node | undefined => state.selectedNode,
-    connectedNode: (state): Node | undefined => state.connectedNode,
-    currentNode: (state): Node | undefined =>
-      state.connectedNode || state.selectedNode,
     isDefaultNodeLoading: (state): boolean => state.isDefaultNodeLoading,
   },
 
@@ -31,6 +26,7 @@ export default {
     selectNode({ commit }, node: Node): void {
       commit(NodeMutationTypes.SET_SELECTED_NODE, node);
     },
+
     async selectNodeChecked(
       { commit, dispatch, getters },
       node: Node
@@ -51,7 +47,6 @@ export default {
           case NodeSelectionStatus.SUCCESS:
             await Promise.allSettled([
               dispatch("clearSelectedNode"),
-              dispatch("clearConnectedNode"),
               dispatch("clearQuota"),
             ]);
             commit(NodeMutationTypes.SET_SELECTED_NODE, node);
@@ -63,15 +58,11 @@ export default {
         await dispatch("setConnectionLoadingState", false);
       }
     },
+
     clearSelectedNode({ commit }): void {
       commit(NodeMutationTypes.CLEAR_SELECTED_NODE);
     },
-    setConnectedNode({ commit }, node: Node): void {
-      commit(NodeMutationTypes.SET_CONNECTED_NODE, node);
-    },
-    clearConnectedNode({ commit }): void {
-      commit(NodeMutationTypes.CLEAR_CONNECTED_NODE);
-    },
+
     async selectDefaultNode({ dispatch, commit, getters }): Promise<void> {
       try {
         commit(NodeMutationTypes.SET_DEFAULT_NODE_LOADING_STATE, true);
@@ -104,13 +95,11 @@ export default {
         }
         await dispatch("selectNode", node);
         await dispatch("setConnectionState", isConnected);
-        if (isConnected) {
-          await dispatch("setConnectedNode", node);
-        }
       } finally {
         commit(NodeMutationTypes.SET_DEFAULT_NODE_LOADING_STATE, false);
       }
     },
+
     async resetNodeState({ commit }): Promise<void> {
       commit(NodeMutationTypes.RESET_NODE_STATE);
     },
@@ -120,21 +109,18 @@ export default {
     [NodeMutationTypes.SET_SELECTED_NODE](state, payload: Node): void {
       state.selectedNode = payload;
     },
+
     [NodeMutationTypes.CLEAR_SELECTED_NODE](state): void {
       state.selectedNode = getDefaultState().selectedNode;
     },
-    [NodeMutationTypes.SET_CONNECTED_NODE](state, payload: Node): void {
-      state.connectedNode = payload;
-    },
-    [NodeMutationTypes.CLEAR_CONNECTED_NODE](state): void {
-      state.connectedNode = getDefaultState().connectedNode;
-    },
+
     [NodeMutationTypes.SET_DEFAULT_NODE_LOADING_STATE](
       state,
       value: boolean
     ): void {
       state.isDefaultNodeLoading = value;
     },
+
     [NodeMutationTypes.RESET_NODE_STATE](state): void {
       Object.assign(state, getDefaultState());
     },

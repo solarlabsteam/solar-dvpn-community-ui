@@ -31,20 +31,18 @@ export default {
   },
 
   actions: {
-    async connectToNode({ commit, dispatch, getters }): Promise<void> {
+    async connectToNode({ commit, getters }): Promise<void> {
       commit(ConnectionMutationTypes.SET_CONNECTION_LOADING_STATE, true);
 
       await connectionService.queryConnectToNode(
         getters.selectedNode.blockchainAddress
       );
-      await dispatch("setConnectedNode", getters.selectedNode);
     },
 
-    async disconnectFromNode({ commit, dispatch }): Promise<void> {
+    async disconnectFromNode({ commit }): Promise<void> {
       commit(ConnectionMutationTypes.SET_CONNECTION_LOADING_STATE, true);
 
       await connectionService.queryDisconnectFromNode();
-      await dispatch("clearConnectedNode");
     },
 
     async setConnectionState({ commit }, payload: boolean): Promise<void> {

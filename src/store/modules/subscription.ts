@@ -39,7 +39,6 @@ export default {
         if (status === NodeSubscriptionStatus.SUCCESS) {
           await Promise.allSettled([
             dispatch("clearSelectedNode"),
-            dispatch("clearConnectedNode"),
             dispatch("clearQuota"),
             dispatch("fetchSubscribedNodes"),
           ]);
