@@ -31,6 +31,7 @@ import {
   computed,
   onBeforeMount,
   onBeforeUnmount,
+  onErrorCaptured,
   onMounted,
   watch,
 } from "vue";
@@ -133,6 +134,14 @@ onBeforeUnmount(() => {
   window.removeEventListener("focus", onViewAppear);
 
   wsProvider.closeConnection();
+});
+
+onErrorCaptured((err) => {
+  if (err && (err.name || err.message)) {
+    setError(
+      (err.name ? err.name + " " : "") + (err.message ? err.message + " " : "")
+    );
+  }
 });
 
 watch(() => isAuthorized.value, loadData);
