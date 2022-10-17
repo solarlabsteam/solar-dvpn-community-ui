@@ -9,7 +9,6 @@ export default {
       text: "Be careful, destructive stuff!",
     },
     balance: "Your balance",
-    balanceUpdated: "Updated {time} ago",
     buyTokens: "Buy DVPN tokens",
   },
 

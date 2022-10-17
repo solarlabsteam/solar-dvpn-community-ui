@@ -25,10 +25,7 @@
           </div>
         </template>
       </settings-section>
-      <settings-section
-        :title="t('account.balance')"
-        :subtitle="t('account.balanceUpdated', { time: '0 minutes' })"
-      >
+      <settings-section :title="t('account.balance')">
         <template #content>
           <div class="account-settings__balance">
             {{ balance }}
