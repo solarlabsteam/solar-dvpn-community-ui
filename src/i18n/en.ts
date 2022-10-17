@@ -174,10 +174,7 @@ export default {
     header: "Buy dVPN tokens",
     body: {
       header: "Buy tokens and trade them for GB!",
-      product: {
-        save: "Save",
-        best: "Best",
-      },
+      noData: "No products are available",
       payment:
         "The payment of {price} will be charged to your iTunes account at confirmation of purchase. Tokens will be credited to your account within few minutes after purchase.",
     },
