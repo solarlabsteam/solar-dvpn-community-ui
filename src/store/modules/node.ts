@@ -23,12 +23,13 @@ export default {
   },
 
   actions: {
-    selectNode({ commit }, node: Node): void {
+    async selectNode({ commit, dispatch }, node: Node): Promise<void> {
       commit(NodeMutationTypes.SET_SELECTED_NODE, node);
+      await dispatch("fetchQuota");
     },
 
     async selectNodeChecked(
-      { commit, dispatch, getters },
+      { dispatch, getters },
       node: Node
     ): Promise<NodeSelectionStatus> {
       await dispatch("setConnectionLoadingState", true);
@@ -45,11 +46,7 @@ export default {
 
         switch (status) {
           case NodeSelectionStatus.SUCCESS:
-            await Promise.allSettled([
-              dispatch("clearSelectedNode"),
-              dispatch("clearQuota"),
-            ]);
-            commit(NodeMutationTypes.SET_SELECTED_NODE, node);
+            await dispatch("selectNode", node);
             return NodeSelectionStatus.SUCCESS;
           default:
             return status;
@@ -57,10 +54,6 @@ export default {
       } finally {
         await dispatch("setConnectionLoadingState", false);
       }
-    },
-
-    clearSelectedNode({ commit }): void {
-      commit(NodeMutationTypes.CLEAR_SELECTED_NODE);
     },
 
     async selectDefaultNode({ dispatch, commit, getters }): Promise<void> {
@@ -108,10 +101,6 @@ export default {
   mutations: {
     [NodeMutationTypes.SET_SELECTED_NODE](state, payload: Node): void {
       state.selectedNode = payload;
-    },
-
-    [NodeMutationTypes.CLEAR_SELECTED_NODE](state): void {
-      state.selectedNode = getDefaultState().selectedNode;
     },
 
     [NodeMutationTypes.SET_DEFAULT_NODE_LOADING_STATE](

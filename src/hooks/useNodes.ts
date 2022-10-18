@@ -1,10 +1,11 @@
 import type { ComputedRef } from "vue";
-import type { ContinentsInfo, Node } from "@/types";
+import type { ContinentsInfo, Node, Quota } from "@/types";
 import { useStore } from "vuex";
 import { computed } from "vue";
 
 export default function useNodes(): {
   selectedNode: ComputedRef<Node | undefined>;
+  selectedNodeQuota: ComputedRef<Quota | undefined>;
   continents: ComputedRef<ContinentsInfo>;
   subscribedNodes: ComputedRef<Node[]>;
   isDefaultNodeLoading: ComputedRef<boolean>;
@@ -15,6 +16,9 @@ export default function useNodes(): {
 
   const selectedNode = computed<Node | undefined>(
     () => store.getters.selectedNode
+  );
+  const selectedNodeQuota = computed<Quota | undefined>(
+    () => store.getters.quota
   );
   const continents = computed<ContinentsInfo>(() => store.getters.continents);
   const subscribedNodes = computed<Node[]>(() => store.getters.subscribedNodes);
@@ -32,6 +36,7 @@ export default function useNodes(): {
 
   return {
     selectedNode,
+    selectedNodeQuota,
     continents,
     subscribedNodes,
     isDefaultNodeLoading,

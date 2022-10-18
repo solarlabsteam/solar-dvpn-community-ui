@@ -11,7 +11,6 @@ export enum NodesFiltersMutationTypes {
 
 export enum NodeMutationTypes {
   SET_SELECTED_NODE = "SET_SELECTED_NODE",
-  CLEAR_SELECTED_NODE = "CLEAR_SELECTED_NODE",
   SET_DEFAULT_NODE_LOADING_STATE = "SET_DEFAULT_NODE_LOADING_STATE",
   RESET_NODE_STATE = "RESET_NODE_STATE",
 }
@@ -33,7 +32,6 @@ export enum SubscriptionMutationTypes {
 export enum QuotaMutationTypes {
   SET_QUOTA = "SET_QUOTA",
   SET_QUOTA_LOADING_STATE = "SET_QUOTA_LOADING_STATE",
-  CLEAR_QUOTA = "CLEAR_QUOTA",
   RESET_QUOTA_STATE = "RESET_QUOTA_STATE",
 }
 

@@ -20,54 +20,30 @@
 </template>
 
 <script setup lang="ts">
-import { useStore } from "vuex";
 import { computed } from "vue";
 import ConnectionDetails from "../ConnectionDetails";
 import { formatBandwidth } from "@/utils/formatters";
-import type { Bandwidth, Node, Quota } from "@/types";
+import type { Bandwidth } from "@/types";
 import AccountPreview from "@/views/ConnectionView/AccountPreview";
 import ConnectionStatus from "@/views/ConnectionView/ConnectionStatus/ConnectionStatus.vue";
 import ConnectionControls from "@/views/ConnectionView/ConnectionControls/ConnectionControls.vue";
-import useError from "@/hooks/useError";
+import useNodes from "@/hooks/useNodes";
+import useConnection from "@/hooks/useConnection";
 
-const store = useStore();
-const { setError } = useError();
+const { isConnected } = useConnection();
+const { selectedNode: node, selectedNodeQuota: quota } = useNodes();
 
-const selectedNode = computed<Node>(() => store.getters.selectedNode);
-const isConnected = computed<boolean>(() => store.getters.isConnected);
-const quotaData = computed<Quota>(() => store.getters.quota);
 const bandwidthDownload = computed<Bandwidth>(() =>
-  formatBandwidth(selectedNode.value?.bandwidthDownload || 0)
+  formatBandwidth(node.value?.bandwidthDownload || 0)
 );
 const bandwidthUpload = computed<Bandwidth>(() =>
-  formatBandwidth(selectedNode.value?.bandwidthUpload || 0)
+  formatBandwidth(node.value?.bandwidthUpload || 0)
 );
 const bandwidthLeft = computed<string>(() =>
   (
-    (Number(quotaData.value?.allocated || 0) -
-      Number(quotaData.value?.consumed || 0)) /
+    (Number(quota.value?.allocated || 0) - Number(quota.value?.consumed || 0)) /
     1e9
   ).toFixed(2)
-);
-
-const handleSelectedNode = async (): Promise<void> => {
-  try {
-    await store.dispatch("fetchQuota");
-  } catch (e) {
-    setError(JSON.stringify(e));
-  }
-};
-
-if (selectedNode.value) {
-  handleSelectedNode();
-}
-
-store.watch(
-  (): Node | undefined => store.getters.selectedNode,
-  (node?: Node) => {
-    if (!node) return;
-    handleSelectedNode();
-  }
 );
 </script>
 

@@ -38,11 +38,9 @@ export default {
         const status = NodeSubscriptionStatus.SUCCESS;
         if (status === NodeSubscriptionStatus.SUCCESS) {
           await Promise.allSettled([
-            dispatch("clearSelectedNode"),
-            dispatch("clearQuota"),
             dispatch("fetchSubscribedNodes"),
+            dispatch("selectNode", paymentInfo.node),
           ]);
-          await dispatch("selectNode", paymentInfo.node);
         }
         return status;
       } finally {
