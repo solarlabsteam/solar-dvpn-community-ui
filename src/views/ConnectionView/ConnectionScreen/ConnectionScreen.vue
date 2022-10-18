@@ -22,7 +22,7 @@
 <script setup lang="ts">
 import { useStore } from "vuex";
 import { computed } from "vue";
-import ConnectionDetails from "./ConnectionDetails";
+import ConnectionDetails from "../ConnectionDetails";
 import { formatBandwidth } from "@/utils/formatters";
 import type { Bandwidth, Node, Quota } from "@/types";
 import AccountPreview from "@/views/ConnectionView/AccountPreview";
@@ -71,4 +71,4 @@ store.watch(
 );
 </script>
 
-<style lang="scss" src="./Connection.scss" scoped />
+<style lang="scss" src="./ConnectionScreen.scss" scoped />
