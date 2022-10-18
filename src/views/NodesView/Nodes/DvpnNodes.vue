@@ -18,7 +18,7 @@
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import ContinentsList from "@/components/app/ContinentsList";
-import Subscriptions from "@/views/NodesView/tabs/SubscribedNodes.vue";
+import Subscriptions from "@/views/NodesView/Nodes/tabs/SubscribedNodes.vue";
 import type { ContinentCode } from "@/types";
 import useAppRouter from "@/hooks/useAppRouter";
 import useNodes from "@/hooks/useNodes";

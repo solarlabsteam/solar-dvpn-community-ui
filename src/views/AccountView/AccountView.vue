@@ -16,7 +16,6 @@
 </template>
 
 <script setup lang="ts">
-import SlrView from "@/components/ui/SlrView/SlrView.vue";
 import AccountSettings from "@/views/AccountView/AccountSettings";
 import useAppRouter from "@/hooks/useAppRouter";
 

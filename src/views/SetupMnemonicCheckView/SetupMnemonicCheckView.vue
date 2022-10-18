@@ -13,8 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import SlrView from "@/components/ui/SlrView/SlrView.vue";
-import CheckMnemonic from "@/views/SetupMnemonicCheckView/CheckMnemonic/CheckMnemonic.vue";
+import CheckMnemonic from "@/views/SetupMnemonicCheckView/CheckMnemonic";
 import { useI18n } from "vue-i18n";
 import useAppRouter from "@/hooks/useAppRouter";
 

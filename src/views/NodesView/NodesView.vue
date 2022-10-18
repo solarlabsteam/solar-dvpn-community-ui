@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import DvpnNodes from "@/views/NodesView/DvpnNodes.vue";
+import DvpnNodes from "@/views/NodesView/Nodes";
 import { useI18n } from "vue-i18n";
 import useAppRouter from "@/hooks/useAppRouter";
 

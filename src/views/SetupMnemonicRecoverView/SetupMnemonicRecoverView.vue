@@ -28,8 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import SlrView from "@/components/ui/SlrView/SlrView.vue";
-import RecoverMnemonic from "@/views/SetupMnemonicRecoverView/RecoverMnemonic/RecoverMnemonic.vue";
+import RecoverMnemonic from "@/views/SetupMnemonicRecoverView/RecoverMnemonic";
 import SlrButton from "@/components/ui/SlrButton/SlrButton.vue";
 import { useI18n } from "vue-i18n";
 import { computed, ref } from "vue";

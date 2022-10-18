@@ -15,7 +15,6 @@
 </template>
 
 <script setup lang="ts">
-import SlrView from "@/components/ui/SlrView";
 import { useI18n } from "vue-i18n";
 import SettingsDns from "@/views/SettingsDnsView/SettingsDns/SettingsDns.vue";
 import useAppRouter from "@/hooks/useAppRouter";
