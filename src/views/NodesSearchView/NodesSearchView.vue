@@ -30,12 +30,12 @@
 <script setup lang="ts">
 import NodesSearch from "@/views/NodesSearchView/NodesSearch";
 import { useI18n } from "vue-i18n";
-import { ContinentCode, type NodesFilters } from "@/types";
+import { ContinentCode } from "@/types";
 import { computed, onMounted, ref, watch } from "vue";
 import lookupCountry from "country-code-lookup";
-import { useStore } from "vuex";
 import useAppDialogs from "@/hooks/useAppDialogs";
 import useAppRouter from "@/hooks/useAppRouter";
+import useNodesFilters from "@/hooks/useNodesFilters";
 
 const props = defineProps<{
   continentCode?: ContinentCode;
@@ -44,8 +44,8 @@ const props = defineProps<{
 
 const { t } = useI18n();
 const { openNodesView, openNodesAvailableView } = useAppRouter();
-const store = useStore();
 const { openNodesFiltersModal } = useAppDialogs();
+const { filters, setFilters, clearFilters } = useNodesFilters();
 
 const displayedContinent = ref<ContinentCode | undefined>(props.continentCode);
 const displayedCountry = ref<string | undefined>(props.countryCode);
@@ -59,11 +59,10 @@ const countryName = computed(
     lookupCountry.byIso(displayedCountry.value)?.country
 );
 const location = computed(() => countryName.value || continentName.value || "");
-const filters = computed<NodesFilters>(() => store.getters.filters);
 
 onMounted(async () => {
-  await store.dispatch("setFilters", {
-    ...store.getters.filters,
+  await setFilters({
+    ...filters.value,
     query: "",
     continentCode:
       displayedContinent.value === ContinentCode.RW || !displayedContinent.value
@@ -74,7 +73,7 @@ onMounted(async () => {
 });
 
 const back = () => {
-  store.dispatch("clearFilters");
+  clearFilters();
   if (!props.continentCode && !props.countryCode) {
     openNodesView();
   } else {

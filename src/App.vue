@@ -53,7 +53,7 @@ const { isDnsConfigurationsLoading, loadDnsConfigurations } = useDns();
 const { get } = useWallet();
 const { openSetupGreetingView, openConnectionView } = useAppRouter();
 const { isAuthorized, isAppSetupInProgress, setupApp } = useAppSettings();
-const { isDefaultNodeLoading, loadNodes, loadContinents } = useNodes();
+const { isDefaultNodeLoading, loadAllNodes, loadContinents } = useNodes();
 const { checkNodeConnection, setConnectionState } = useConnection();
 
 const isAppLoading = computed<boolean>(
@@ -72,7 +72,7 @@ const resetError = () => {
 const loadData = () => {
   Promise.allSettled([
     get(),
-    loadNodes(),
+    loadAllNodes(),
     loadContinents(),
     loadDnsConfigurations(),
   ])

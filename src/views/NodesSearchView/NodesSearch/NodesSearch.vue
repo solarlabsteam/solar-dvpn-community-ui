@@ -9,9 +9,7 @@
     <slr-linear-loader v-if="isNodesLoading" class="available-nodes__loader" />
 
     <no-data
-      v-else-if="
-        !isLoadingFailed && !isNodesLoading && filteredNodes.length === 0
-      "
+      v-else-if="!isLoadingFailed && !isNodesLoading && nodes.length === 0"
       :title="t('node.list.noData.title')"
       :text="t('node.list.noData.text')"
     />
@@ -26,7 +24,7 @@
     <nodes-list
       v-else
       class="nodes-search__list"
-      :nodes="filteredNodes"
+      :nodes="nodes"
       :select="select"
       :load-more="loadMore"
     />
@@ -34,38 +32,40 @@
 </template>
 
 <script setup lang="ts">
-import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
-import { computed, ref, watch } from "vue";
-import type { ContinentCode, Node, NodesSearchParameters } from "@/types";
+import { ref, watch } from "vue";
+import type { ContinentCode, NodesSearchParameters } from "@/types";
 import SlrLinearLoader from "@/components/ui/SlrLinearLoader";
 import NodesList from "@/components/app/NodesList";
 import NoData from "@/components/app/NoData";
 import useConnection from "@/hooks/useConnection";
+import useNodes from "@/hooks/useNodes";
+import useNodesFilters from "@/hooks/useNodesFilters";
 
 defineProps<{
   continentCode?: ContinentCode;
   countryCode?: string;
 }>();
 
-const store = useStore();
 const { t } = useI18n();
 const { select } = useConnection();
+const {
+  nodes,
+  isNodesLoading,
+  isNodesLoadingFailed: isLoadingFailed,
+  isMoreNodesAvailable,
+  loadAvailableNodes,
+  loadMoreAvailableNodes,
+} = useNodes();
+const { filters, setFilters } = useNodesFilters();
 
 const searchString = ref("");
 const displayedContinent = ref<ContinentCode>();
 const displayedCountry = ref<string>();
 
-const filteredNodes = computed<Node[]>(() => store.getters.nodes);
-
-const isNodesLoading = computed<boolean>(() => store.getters.isNodesLoading);
-const isLoadingFailed = computed<boolean>(
-  () => store.getters.isNodesLoadingFailed
-);
-
 const loadMore = () => {
-  if (store.getters.isMoreNodesAvailable && !store.getters.isNodesLoading) {
-    store.dispatch("fetchMoreNodes", {
+  if (isMoreNodesAvailable.value && !isNodesLoading.value) {
+    loadMoreAvailableNodes({
       country: displayedCountry.value,
       continent: displayedContinent.value,
       query: searchString.value,
@@ -74,7 +74,7 @@ const loadMore = () => {
 };
 
 const fetchNodes = (params?: NodesSearchParameters) => {
-  store.dispatch("fetchNodes", params);
+  loadAvailableNodes(params);
 };
 
 watch(
@@ -83,16 +83,16 @@ watch(
 );
 
 watch(searchString, async (query) => {
-  await store.dispatch("setFilters", {
-    ...store.getters.filters,
+  await setFilters({
+    ...filters.value,
     query,
   });
   const { countryCode, continentCode, orderBy, minPrice, maxPrice } =
-    store.getters.filters;
-  await store.dispatch("fetchNodes", {
+    filters.value;
+  await loadAvailableNodes({
     query,
     country: countryCode,
-    continent: continentCode,
+    continent: continentCode ? (continentCode as ContinentCode) : undefined,
     minPrice: Number(minPrice) * 1e6,
     maxPrice: Number(maxPrice) * 1e6,
     orderBy,
