@@ -61,10 +61,8 @@ import useGlobalEmitter from "@/hooks/useGlobalEmitter";
 import GbsInput from "@/components/app/GbsInput";
 import type { Node } from "@/types";
 import NodePreview from "@/components/app/NodePreview/NodePreview.vue";
-import denomNames from "@/constants/denomNames";
 import SlrButton from "@/components/ui/SlrButton/SlrButton.vue";
 import useSubscription from "@/hooks/useSubscription";
-import { network } from "@/constants";
 import useError from "@/hooks/useError";
 import useAppRouter from "@/hooks/useAppRouter";
 
@@ -80,10 +78,9 @@ const node = ref<Node>();
 
 const formattedPrice = computed<string>(
   () =>
-    `${(
-      (node.value!.defaultPrice * amountGb.value) /
-      denomNames.udvpn.perUnit
-    ).toFixed(2)} ${network}`
+    `${((node.value!.defaultPrice * amountGb.value) / 1e6).toFixed(2)} ${t(
+      "node.dvpn"
+    )}`
 );
 
 const open = () => {

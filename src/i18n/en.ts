@@ -69,6 +69,7 @@ export default {
   },
 
   node: {
+    dvpn: "DVPN",
     list: {
       title: "DVPN Nodes",
       noData: {

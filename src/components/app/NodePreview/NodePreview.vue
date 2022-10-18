@@ -37,7 +37,6 @@
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { type Node, NodeStatus } from "@/types";
-import { network } from "@/constants";
 
 const props = withDefaults(defineProps<{ node: Node; showPrice?: boolean }>(), {
   showPrice: true,
@@ -50,7 +49,7 @@ const formattedAddress = computed(
 const isActive = computed(() => props.node.status === NodeStatus.active);
 const nodeName = computed(() => props.node.moniker || t("node.unavailable"));
 const price = computed(
-  () => `${(props.node.defaultPrice / 1e6).toFixed(2)} ${network}`
+  () => `${(props.node.defaultPrice / 1e6).toFixed(2)} ${t("node.dvpn")}`
 );
 </script>
 
