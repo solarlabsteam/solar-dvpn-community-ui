@@ -56,7 +56,8 @@ export default {
         );
         await dispatch("fetchSubscribedNodes");
       } catch (e) {
-        dispatch("fetchSubscribedNodes");
+        await dispatch("fetchSubscribedNodes");
+        throw e;
       } finally {
         commit(
           SubscriptionMutationTypes.SET_UNSUBSCRIPTION_LOADING_STATE,
