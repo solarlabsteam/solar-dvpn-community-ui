@@ -73,11 +73,11 @@ const loadData = () => {
     loadDnsConfigurations(),
   ])
     .then((results) => {
-      results
-        .filter((result) => result.status === "rejected")
-        .forEach((result) =>
-          setError(JSON.stringify((result as PromiseRejectedResult).reason))
-        );
+      results.forEach((result) => {
+        if (result.status === "rejected") {
+          handleError(result.reason);
+        }
+      });
       wsProvider.openConnection(
         (event: MessageEvent) => {
           const data = JSON.parse(event.data);
