@@ -136,7 +136,16 @@ onBeforeUnmount(() => {
 
 onErrorCaptured(handleError);
 
-watch(() => isAuthorized.value, loadData);
+watch(
+  () => isAuthorized.value,
+  () => {
+    if (isAuthorized.value) {
+      loadData();
+    } else {
+      wsProvider.closeConnection();
+    }
+  }
+);
 </script>
 
 <style lang="scss">
