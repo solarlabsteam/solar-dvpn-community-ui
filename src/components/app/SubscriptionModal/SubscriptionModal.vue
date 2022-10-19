@@ -63,13 +63,11 @@ import type { Node } from "@/types";
 import NodePreview from "@/components/app/NodePreview/NodePreview.vue";
 import SlrButton from "@/components/ui/SlrButton/SlrButton.vue";
 import useSubscription from "@/hooks/useSubscription";
-import useError from "@/hooks/useError";
 import useAppRouter from "@/hooks/useAppRouter";
 
 const { t } = useI18n();
 const emitter = useGlobalEmitter();
 const { isSubscribingLoading, subscribe } = useSubscription();
-const { setError } = useError();
 const { openConnectionView } = useAppRouter();
 
 const isOpen = ref(false);
@@ -96,13 +94,9 @@ const onInput = (gbs: number) => {
 };
 
 const subscribeToNode = async () => {
-  try {
-    const closeModal = await subscribe(node.value!, amountGb.value);
-    if (closeModal) close();
-    openConnectionView();
-  } catch (e) {
-    setError(JSON.stringify(e));
-  }
+  const closeModal = await subscribe(node.value!, amountGb.value);
+  if (closeModal) close();
+  openConnectionView();
 };
 
 emitter.$on("open-subscription-modal", (n: Node) => {

@@ -16,19 +16,14 @@
 
 <script setup lang="ts">
 import useAppRouter from "@/hooks/useAppRouter";
-import useError from "@/hooks/useError";
 import useAppSettings from "@/hooks/useAppSettings";
 import useWallet from "@/hooks/useWallet";
 
 const { openSetupGreetingView } = useAppRouter();
 const { isWalletLoading, remove } = useWallet();
 const { isLogoutInProgress, logout } = useAppSettings();
-const { setError } = useError();
 
 const logoutWallet = () => {
-  remove()
-    .then(logout)
-    .then(openSetupGreetingView)
-    .catch((e) => setError(JSON.stringify(e)));
+  remove().then(logout).then(openSetupGreetingView);
 };
 </script>

@@ -51,7 +51,6 @@
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import useWallet from "@/hooks/useWallet";
-import useError from "@/hooks/useError";
 import useAppRouter from "@/hooks/useAppRouter";
 import useAppSettings from "@/hooks/useAppSettings";
 
@@ -61,7 +60,6 @@ const props = defineProps<{
 
 const { t } = useI18n();
 const { isWalletLoading, recover } = useWallet();
-const { setError } = useError();
 const { openSetupCompleteView } = useAppRouter();
 const { login } = useAppSettings();
 
@@ -74,10 +72,7 @@ const onTimeIsOver = () => {
 };
 
 const confirm = (): void => {
-  recover(props.mnemonic)
-    .then(login)
-    .then(openSetupCompleteView)
-    .catch((e) => setError(JSON.stringify(e)));
+  recover(props.mnemonic).then(login).then(openSetupCompleteView);
 };
 </script>
 

@@ -33,7 +33,6 @@ import SlrButton from "@/components/ui/SlrButton/SlrButton.vue";
 import { useI18n } from "vue-i18n";
 import { computed, ref } from "vue";
 import useWallet from "@/hooks/useWallet";
-import useError from "@/hooks/useError";
 import useAppRouter from "@/hooks/useAppRouter";
 import useAppSettings from "@/hooks/useAppSettings";
 
@@ -41,7 +40,6 @@ const { t } = useI18n();
 const { login } = useAppSettings();
 const { openSetupCompleteView, openSetupActionsView } = useAppRouter();
 const { isWalletLoading, recover } = useWallet();
-const { setError } = useError();
 
 const words = ref<string[]>([]);
 
@@ -64,10 +62,7 @@ const onWordsUpdate = (value: string, index: number) => {
 
 const done = () => {
   const mnemonic = words.value.map((i) => i.trim()).join(" ");
-  recover(mnemonic)
-    .then(login)
-    .then(openSetupCompleteView)
-    .catch((e) => setError(JSON.stringify(e)));
+  recover(mnemonic).then(login).then(openSetupCompleteView);
 };
 </script>
 

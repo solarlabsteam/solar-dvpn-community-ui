@@ -19,25 +19,23 @@ import NodeSwitch from "@/components/app/NodeSwitch/NodeSwitch.vue";
 import SlrButton from "@/components/ui/SlrButton/SlrButton.vue";
 import useConnection from "@/hooks/useConnection";
 import { useI18n } from "vue-i18n";
-import useError from "@/hooks/useError";
 import useNodes from "@/hooks/useNodes";
 
 const { t } = useI18n();
 const { connect, disconnect, isConnectionLoading, isConnected } =
   useConnection();
 const { selectedNode } = useNodes();
-const { setError } = useError();
 
 const toggleConnect = (): void => {
   if (!selectedNode.value) return;
   if (isConnectionLoading.value) return;
 
   if (isConnected.value) {
-    disconnect().catch((e) => setError(JSON.stringify(e)));
+    disconnect();
     return;
   }
 
-  connect(selectedNode.value).catch((e) => setError(JSON.stringify(e)));
+  connect(selectedNode.value);
 };
 </script>
 

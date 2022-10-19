@@ -63,11 +63,7 @@ const isAppLoading = computed<boolean>(
     isDnsConfigurationsLoading.value
 );
 
-const { error, setError } = useError();
-
-const resetError = () => {
-  setError(undefined);
-};
+const { error, setError, resetError, handleError } = useError();
 
 const loadData = () => {
   Promise.allSettled([
@@ -98,11 +94,13 @@ const loadData = () => {
           }
         },
         (event: Event) => {
-          setError(`Socket connection error: ${JSON.stringify(event)}.`);
+          setError(
+            `Socket connection error: ${event.type}; ${JSON.stringify(event)}.`
+          );
         }
       );
     })
-    .catch((e) => setError(JSON.stringify(e)));
+    .catch(handleError);
 };
 
 const onViewAppear = () => {
@@ -123,7 +121,7 @@ onBeforeMount(() => {
         openSetupGreetingView();
       }
     })
-    .catch((e) => setError(JSON.stringify(e)));
+    .catch(handleError);
 });
 
 onMounted(() => {
@@ -136,13 +134,7 @@ onBeforeUnmount(() => {
   wsProvider.closeConnection();
 });
 
-onErrorCaptured((err) => {
-  if (err && (err.name || err.message)) {
-    setError(
-      (err.name ? err.name + " " : "") + (err.message ? err.message + " " : "")
-    );
-  }
-});
+onErrorCaptured(handleError);
 
 watch(() => isAuthorized.value, loadData);
 </script>
@@ -191,7 +183,7 @@ body {
   color: white;
   width: 100%;
   overflow-x: auto;
-  z-index: 1;
+  z-index: 100;
   box-sizing: border-box;
   word-break: break-all;
 }
