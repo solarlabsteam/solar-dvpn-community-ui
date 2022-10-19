@@ -9,7 +9,7 @@
           {{ croppedAddress }}
         </div>
         <div class="account-preview__balance">
-          {{ `${wallet.balance / 1e6} DVPN` }}
+          {{ balance }}
         </div>
       </div>
       <div class="account-preview__icon slr-clickable" @click="openAccountView">
@@ -23,12 +23,18 @@
 import { computed } from "vue";
 import useAppRouter from "@/hooks/useAppRouter";
 import useWallet from "@/hooks/useWallet";
+import { useI18n } from "vue-i18n";
 
+const { t } = useI18n();
 const { wallet } = useWallet();
 const { openAccountView, openSettingsView } = useAppRouter();
 
-const croppedAddress = computed<string>(
+const balance = computed<string | undefined>(
+  () => wallet.value && `${wallet.value.balance / 1e6} ${t("node.dvpn")}`
+);
+const croppedAddress = computed<string | undefined>(
   () =>
+    wallet.value &&
     `${wallet.value.address.slice(0, 8)}...${wallet.value.address.slice(-8)}`
 );
 </script>

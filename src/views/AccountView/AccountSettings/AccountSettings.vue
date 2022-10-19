@@ -4,7 +4,7 @@
       <settings-section class="mb-5">
         <template #content>
           <div class="d-flex align-items-center mb-3">
-            <qr-code class="mr-4" :value="address" :size="85" />
+            <qr-code v-if="address" class="mr-4" :value="address" :size="85" />
             <div class="account-settings__body-wallet">
               <div class="d-flex w-100">
                 <div class="w-100">
@@ -77,12 +77,14 @@ const { t } = useI18n();
 const { wallet, get } = useWallet();
 const { openPurchaseModal } = useAppDialogs();
 
-const balance = computed<string>(
-  () => `${wallet.value.balance / 1e6} ${t("node.dvpn")}`
+const balance = computed<string | undefined>(
+  () => wallet.value && `${wallet.value.balance / 1e6} ${t("node.dvpn")}`
 );
-const address = computed<string>(() => wallet.value.address);
-const croppedAddress = computed<string>(
-  () => `${address.value.slice(0, 9)}...${address.value.slice(-10)}`
+const address = computed<string | undefined>(() => wallet.value?.address);
+const croppedAddress = computed<string | undefined>(
+  () =>
+    address.value &&
+    `${address.value.slice(0, 9)}...${address.value.slice(-10)}`
 );
 </script>
 

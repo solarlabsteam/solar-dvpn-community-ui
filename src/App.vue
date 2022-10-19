@@ -136,7 +136,16 @@ onBeforeUnmount(() => {
 
 onErrorCaptured(handleError);
 
-watch(() => isAuthorized.value, loadData);
+watch(
+  () => isAuthorized.value,
+  () => {
+    if (isAuthorized.value) {
+      loadData();
+    } else {
+      wsProvider.closeConnection();
+    }
+  }
+);
 </script>
 
 <style lang="scss">
@@ -169,7 +178,6 @@ body {
   font-family: "Poppins", sans-serif;
   color: var(--slr__txt-clr);
   user-select: none;
-  box-shadow: 0 0 15px 0 gray;
   z-index: 1;
 
   @include font-template(14px, 17px);
