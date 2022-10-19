@@ -1,11 +1,11 @@
 <template>
   <slr-view>
     <template #content>
-      <connection />
+      <connection-screen />
     </template>
   </slr-view>
 </template>
 
 <script setup lang="ts">
-import Connection from "@/views/ConnectionView/Connection.vue";
+import ConnectionScreen from "@/views/ConnectionView/ConnectionScreen";
 </script>

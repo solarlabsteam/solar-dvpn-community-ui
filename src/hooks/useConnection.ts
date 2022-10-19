@@ -36,13 +36,7 @@ export default function useConnection(): {
     node: Node,
     connect: boolean
   ): Promise<void> => {
-    if (
-      node.blockchainAddress ===
-        store.getters.connectedNode?.blockchainAddress ||
-      isConnectionLoading.value
-    ) {
-      return;
-    }
+    if (connect && (isConnected.value || isConnectionLoading.value)) return;
 
     const status: NodeSelectionStatus = await store.dispatch(
       "selectNodeChecked",

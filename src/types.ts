@@ -125,7 +125,6 @@ export interface Quota {
 export enum NodeSelectionStatus {
   SUCCESS = "SUCCESS",
   SUBSCRIPTION_REQUIRED = "SUBSCRIPTION_REQUIRED",
-  CANCELED = "CANCELED",
 }
 
 export enum NodeSubscriptionStatus {

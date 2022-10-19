@@ -38,12 +38,9 @@ export default {
         const status = NodeSubscriptionStatus.SUCCESS;
         if (status === NodeSubscriptionStatus.SUCCESS) {
           await Promise.allSettled([
-            dispatch("clearSelectedNode"),
-            dispatch("clearConnectedNode"),
-            dispatch("clearQuota"),
             dispatch("fetchSubscribedNodes"),
+            dispatch("selectNode", paymentInfo.node),
           ]);
-          await dispatch("selectNode", paymentInfo.node);
         }
         return status;
       } finally {
@@ -59,7 +56,8 @@ export default {
         );
         await dispatch("fetchSubscribedNodes");
       } catch (e) {
-        dispatch("fetchSubscribedNodes");
+        await dispatch("fetchSubscribedNodes");
+        throw e;
       } finally {
         commit(
           SubscriptionMutationTypes.SET_UNSUBSCRIPTION_LOADING_STATE,

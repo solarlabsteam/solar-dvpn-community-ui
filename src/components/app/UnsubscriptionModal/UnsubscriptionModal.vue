@@ -53,12 +53,10 @@ import useGlobalEmitter from "@/hooks/useGlobalEmitter";
 import type { Node } from "@/types";
 import SlrButton from "@/components/ui/SlrButton/SlrButton.vue";
 import useSubscription from "@/hooks/useSubscription";
-import useError from "@/hooks/useError";
 
 const { t } = useI18n();
 const emitter = useGlobalEmitter();
 const { isUnsubscriptionLoading, unsubscribe } = useSubscription();
-const { setError } = useError();
 
 const isOpen = ref(false);
 const node = ref<Node>();
@@ -72,12 +70,8 @@ const close = () => {
 };
 
 const unsubscribeFromNode = async () => {
-  try {
-    await unsubscribe(node.value!);
-    close();
-  } catch (e) {
-    setError(JSON.stringify(e));
-  }
+  await unsubscribe(node.value!);
+  close();
 };
 
 emitter.$on("open-unsubscription-modal", (n: Node) => {

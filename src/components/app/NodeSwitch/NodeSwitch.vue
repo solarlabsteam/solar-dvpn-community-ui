@@ -1,7 +1,12 @@
 <template>
   <div class="node-switch">
-    <node-preview :node="node" :show-price="false" />
-    <slr-button :variant="'primary'" :light="true" @click="openNodesView">
+    <node-preview v-if="node" :node="node" :show-price="false" />
+    <slr-button
+      :variant="'primary'"
+      :light="true"
+      :block="!node"
+      @click="openNodesView"
+    >
       {{ t("action.switch") }}
     </slr-button>
   </div>
@@ -15,7 +20,7 @@ import { useI18n } from "vue-i18n";
 import useAppRouter from "@/hooks/useAppRouter";
 
 defineProps<{
-  node: Node;
+  node?: Node;
 }>();
 
 const { t } = useI18n();

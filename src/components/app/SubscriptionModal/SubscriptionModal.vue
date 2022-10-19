@@ -61,17 +61,13 @@ import useGlobalEmitter from "@/hooks/useGlobalEmitter";
 import GbsInput from "@/components/app/GbsInput";
 import type { Node } from "@/types";
 import NodePreview from "@/components/app/NodePreview/NodePreview.vue";
-import denomNames from "@/constants/denomNames";
 import SlrButton from "@/components/ui/SlrButton/SlrButton.vue";
 import useSubscription from "@/hooks/useSubscription";
-import { network } from "@/constants";
-import useError from "@/hooks/useError";
 import useAppRouter from "@/hooks/useAppRouter";
 
 const { t } = useI18n();
 const emitter = useGlobalEmitter();
 const { isSubscribingLoading, subscribe } = useSubscription();
-const { setError } = useError();
 const { openConnectionView } = useAppRouter();
 
 const isOpen = ref(false);
@@ -80,10 +76,9 @@ const node = ref<Node>();
 
 const formattedPrice = computed<string>(
   () =>
-    `${(
-      (node.value!.defaultPrice * amountGb.value) /
-      denomNames.udvpn.perUnit
-    ).toFixed(2)} ${network}`
+    `${((node.value!.defaultPrice * amountGb.value) / 1e6).toFixed(2)} ${t(
+      "node.dvpn"
+    )}`
 );
 
 const open = () => {
@@ -99,13 +94,9 @@ const onInput = (gbs: number) => {
 };
 
 const subscribeToNode = async () => {
-  try {
-    const closeModal = await subscribe(node.value!, amountGb.value);
-    if (closeModal) close();
-    openConnectionView();
-  } catch (e) {
-    setError(JSON.stringify(e));
-  }
+  const closeModal = await subscribe(node.value!, amountGb.value);
+  if (closeModal) close();
+  openConnectionView();
 };
 
 emitter.$on("open-subscription-modal", (n: Node) => {

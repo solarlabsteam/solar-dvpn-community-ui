@@ -4,12 +4,12 @@ import type { Quota } from "@/types";
 import subscriptionService from "@/services/SubscriptionService";
 
 interface QuotaState {
-  quota: Quota | null;
+  quota: Quota | undefined;
   isQuotaLoading: boolean;
 }
 
 const getDefaultState = (): QuotaState => ({
-  quota: null,
+  quota: undefined,
   isQuotaLoading: false,
 });
 
@@ -17,7 +17,7 @@ export default {
   state: getDefaultState(),
 
   getters: {
-    quota: (state): Quota | null => state.quota,
+    quota: (state): Quota | undefined => state.quota,
     isQuotaLoading: (state): boolean => state.isQuotaLoading,
   },
 
@@ -35,10 +35,6 @@ export default {
       }
     },
 
-    clearQuota({ commit }): void {
-      commit(QuotaMutationTypes.CLEAR_QUOTA);
-    },
-
     resetQuotaState({ commit }): void {
       commit(QuotaMutationTypes.RESET_QUOTA_STATE);
     },
@@ -48,12 +44,11 @@ export default {
     [QuotaMutationTypes.SET_QUOTA](state, payload: Quota): void {
       state.quota = payload;
     },
+
     [QuotaMutationTypes.SET_QUOTA_LOADING_STATE](state, value: boolean): void {
       state.isQuotaLoading = value;
     },
-    [QuotaMutationTypes.CLEAR_QUOTA](state): void {
-      state.quota = getDefaultState().quota;
-    },
+
     [QuotaMutationTypes.RESET_QUOTA_STATE](state): void {
       Object.assign(state, getDefaultState());
     },

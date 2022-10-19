@@ -44,18 +44,14 @@
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
 import useWallet from "@/hooks/useWallet";
-import useError from "@/hooks/useError";
 import useAppRouter from "@/hooks/useAppRouter";
 
 const { t } = useI18n();
 const { isWalletLoading, create } = useWallet();
 const { openSetupCreateView } = useAppRouter();
-const { setError } = useError();
 
 const onCreate = () => {
-  create()
-    .then((mnemonic: string) => openSetupCreateView(mnemonic))
-    .catch((e) => setError(JSON.stringify(e)));
+  create().then((mnemonic: string) => openSetupCreateView(mnemonic));
 };
 </script>
 

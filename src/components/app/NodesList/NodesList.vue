@@ -26,10 +26,11 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import { useStore } from "vuex";
 import type { Node } from "@/types";
 import NodePreview from "@/components/app/NodePreview";
 import SlrIcon from "@/components/ui/SlrIcon/SlrIcon.vue";
+import useConnection from "@/hooks/useConnection";
+import useNodes from "@/hooks/useNodes";
 
 const props = defineProps<{
   nodes: Node[];
@@ -37,13 +38,14 @@ const props = defineProps<{
   loadMore: () => void;
 }>();
 
-const store = useStore();
+const { isConnected } = useConnection();
+const { selectedNode, subscribedNodes } = useNodes();
 
-const connectedNodeAddress = computed(
-  () => store.getters.connectedNode?.blockchainAddress
+const connectedNodeAddress = computed<string | undefined>(() =>
+  isConnected.value ? selectedNode.value?.blockchainAddress : undefined
 );
-const subscribedNodesAddresses = computed(() =>
-  store.getters.subscribedNodes.map((node: Node) => node.blockchainAddress)
+const subscribedNodesAddresses = computed<string[]>(() =>
+  subscribedNodes.value.map((node: Node) => node.blockchainAddress)
 );
 
 const handleScroll = (event: Event) => {

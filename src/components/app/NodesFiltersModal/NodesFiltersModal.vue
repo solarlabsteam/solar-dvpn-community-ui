@@ -65,24 +65,25 @@
 import { useI18n } from "vue-i18n";
 import { computed, ref, watch } from "vue";
 import lookupCountry from "country-code-lookup";
-import { useStore } from "vuex";
 import SlrModal from "@/components/ui/SlrModal";
 import useGlobalEmitter from "@/hooks/useGlobalEmitter";
 import SlrSelect from "@/components/ui/SlrSelect";
 import {
   ContinentCode,
-  type ContinentsInfo,
+  NodesOrder,
   type CountryNodesInfo,
   type NodesFilters,
-  NodesOrder,
-  type NodesSearchParameters,
   type Option,
 } from "@/types";
 import SlrInput from "@/components/ui/SlrInput/SlrInput.vue";
+import useNodes from "@/hooks/useNodes";
+import useNodesFilters from "@/hooks/useNodesFilters";
 
 const { t } = useI18n();
 const emitter = useGlobalEmitter();
-const store = useStore();
+const { continents: continentsInfo, loadAvailableNodes } = useNodes();
+const { filters, setFilters } = useNodesFilters();
+
 const isOpen = ref<boolean>(false);
 const continent = ref<string>();
 const country = ref<string>();
@@ -91,7 +92,6 @@ const maxPrice = ref<number>();
 const order = ref<NodesOrder>();
 const query = ref<string>();
 
-const continentsInfo = computed<ContinentsInfo>(() => store.getters.continents);
 const countries = computed<Option[]>(() => {
   const defaultValue: Option = { value: "any", text: "Any countries" };
 
@@ -131,13 +131,12 @@ watch(
 );
 
 const open = () => {
-  const filters: NodesFilters = store.getters.filters;
-  query.value = filters.query;
-  continent.value = filters.continentCode;
-  country.value = filters.countryCode;
-  minPrice.value = filters.minPrice;
-  maxPrice.value = filters.maxPrice;
-  order.value = filters.orderBy;
+  query.value = filters.value.query;
+  continent.value = filters.value.continentCode;
+  country.value = filters.value.countryCode;
+  minPrice.value = filters.value.minPrice;
+  maxPrice.value = filters.value.maxPrice;
+  order.value = filters.value.orderBy;
 
   isOpen.value = true;
 };
@@ -154,7 +153,7 @@ const close = () => {
 };
 
 const applyFilters = async () => {
-  await store.dispatch("setFilters", {
+  await setFilters({
     query: query.value,
     countryCode: country.value,
     continentCode: continent.value,
@@ -162,7 +161,7 @@ const applyFilters = async () => {
     maxPrice: Number(maxPrice.value),
     orderBy: order.value,
   } as NodesFilters);
-  await store.dispatch("fetchNodes", {
+  await loadAvailableNodes({
     query: query.value,
     country: country.value === "any" ? undefined : country.value,
     continent:
@@ -172,7 +171,7 @@ const applyFilters = async () => {
     minPrice: Number(minPrice.value) * 1e6,
     maxPrice: Number(maxPrice.value) * 1e6,
     orderBy: order.value,
-  } as NodesSearchParameters);
+  });
 
   isOpen.value = false;
 };

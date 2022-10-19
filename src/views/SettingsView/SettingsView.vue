@@ -10,13 +10,13 @@
     </template>
     <template #header-title>Settings</template>
     <template #content>
-      <settings-dns />
+      <settings-controls />
     </template>
   </slr-view>
 </template>
 
 <script setup lang="ts">
-import SettingsDns from "@/views/SettingsView/SettingsDns";
+import SettingsControls from "@/views/SettingsView/SettingsControls";
 import useAppRouter from "@/hooks/useAppRouter";
 
 const { openConnectionView } = useAppRouter();

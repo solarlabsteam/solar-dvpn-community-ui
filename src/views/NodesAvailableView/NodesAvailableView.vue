@@ -28,7 +28,6 @@
 </template>
 
 <script setup lang="ts">
-import SlrView from "@/components/ui/SlrView/SlrView.vue";
 import { useI18n } from "vue-i18n";
 import type { ContinentCode } from "@/types";
 import NodesAvailable from "@/views/NodesAvailableView/NodesAvailable/NodesAvailable.vue";

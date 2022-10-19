@@ -70,7 +70,6 @@ import SlrClipboardText from "@/components/ui/SlrClipboardText";
 import LogoutBtn from "@/components/app/LogoutBtn";
 import SettingsSection from "@/components/app/SettingsSection";
 import SlrButton from "@/components/ui/SlrButton/SlrButton.vue";
-import { network } from "@/constants";
 import useWallet from "@/hooks/useWallet";
 import useAppDialogs from "@/hooks/useAppDialogs";
 
@@ -79,7 +78,7 @@ const { wallet, get } = useWallet();
 const { openPurchaseModal } = useAppDialogs();
 
 const balance = computed<string>(
-  () => `${wallet.value.balance / 1e6} ${network}`
+  () => `${wallet.value.balance / 1e6} ${t("node.dvpn")}`
 );
 const address = computed<string>(() => wallet.value.address);
 const croppedAddress = computed<string>(

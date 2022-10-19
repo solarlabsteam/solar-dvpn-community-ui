@@ -19,13 +19,12 @@
     :title="t('node.list.loadingFailure.title')"
     :text="t('node.list.loadingFailure.text')"
     :action-text="t('action.retry')"
-    :action="fetchSubscribedNodes"
+    :action="loadSubscribedNodes"
   />
 </template>
 
 <script setup lang="ts">
 import { computed, inject } from "vue";
-import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
 import SubscribedNodesList from "@/components/app/SubscribedNodesList/SubscribedNodesList.vue";
 import NoData from "@/components/app/NoData";
@@ -33,37 +32,39 @@ import SlrLinearLoader from "@/components/ui/SlrLinearLoader";
 import type { Node } from "@/types";
 import useConnection from "@/hooks/useConnection";
 import useAppDialogs from "@/hooks/useAppDialogs";
+import useSubscription from "@/hooks/useSubscription";
+import useNodes from "@/hooks/useNodes";
 
-const store = useStore();
 const { t } = useI18n();
 const { select } = useConnection();
+const {
+  subscribedNodes: nodes,
+  isSubscribedNodesLoading,
+  isSubscribedNodesLoadingFailed: isLoadingFailed,
+  isMoreSubscribedNodesAvailable,
+  loadSubscribedNodes,
+  loadMoreSubscribedNodes,
+} = useNodes();
+const { isUnsubscriptionLoading } = useSubscription();
 const { openUnsubscriptionModal } = useAppDialogs();
 
 const selectTab = inject<Function>("selectTab");
 
-const isLoadingFailed = computed<boolean>(
-  () => store.getters.isSubscribedNodesLoadingFailed
-);
-const nodes = computed<Node[]>(() => store.getters.subscribedNodes);
 const isLoading = computed<boolean>(
-  () =>
-    store.getters.isUnsubscriptionLoading ||
-    store.getters.isSubscribedNodesLoading
+  () => isUnsubscriptionLoading.value || isSubscribedNodesLoading.value
 );
 
 const unsubscribeFromNode = async (node: Node) => {
   openUnsubscriptionModal(node);
 };
 
-const fetchSubscribedNodes = () => store.dispatch("fetchSubscribedNodes");
-
 const loadMore = () => {
   if (
-    store.getters.isMoreSubscribedNodesAvailable &&
-    !store.getters.isSubscribedNodesLoading &&
-    !store.getters.isUnsubscriptionLoading
+    isMoreSubscribedNodesAvailable.value &&
+    !isSubscribedNodesLoading.value &&
+    !isUnsubscriptionLoading.value
   ) {
-    store.dispatch("fetchMoreSubscribedNodes");
+    loadMoreSubscribedNodes();
   }
 };
 
